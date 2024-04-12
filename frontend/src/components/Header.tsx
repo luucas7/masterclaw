@@ -1,4 +1,5 @@
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { Col, Row } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 
@@ -7,17 +8,23 @@ const Header = () => {
 
   return (
     <>
-    <header>
+        <header>
+            <Row>
+                <Col>
+                    <Col>
+                        <Link className='' to='/' ><li>Triconquest</li></Link>
+                    </Col>
+                    <Col>
+                        <Link className='' to='/adventure' ><li>Adventure</li></Link>
+                        <Link className='' to='/cards' ><li>Cards</li></Link>
 
-        <Link className='tab grow-1' to="/" ><li >Tri Conquest</li></Link>
-        <Link className="tab" to="/adventure" ><li >Aventure</li></Link>
-        <Link className="tab" to="/cards" ><li>Cartes</li></Link>
-              
-        {useAuthUser() === null
-        ? <Link className="tab grow-1'" to="/login" ><li >Se connecter</li></Link>
-        : <Link className="tab grow-1'" to="/logout" ><li >Se déconnecter</li></Link>}
-      </header>
-      </>
+                    </Col>
+                        
+                    {!useAuthUser() && <Link className='' to='/login' ><li >Log in</li></Link>}      
+                </Col>
+            </Row>
+        </header>
+    </>
 
   )
 }
