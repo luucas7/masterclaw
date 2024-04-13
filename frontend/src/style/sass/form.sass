@@ -1,0 +1,106 @@
+@import ./variables.sass
+
+
+
+.luucky-form-container
+    
+    border-radius: 1rem
+    background-color: $secondary-color
+    padding: 2.5rem
+    color: $text-color
+
+.luucky-title
+    text-align: center
+    font-size: 1.75rem /* 1.5 */
+    line-height: 2rem
+    font-weight: 700
+
+.luucky-input-group
+    margin-top: 0.25rem
+    font-size: 0.9rem
+    line-height: 1.4rem
+
+    label
+        display: block
+        color: rgba(156, 163, 175, 1)
+        margin-bottom: 5px
+        margin-top: 3.5vh
+
+    input, select
+        width: 100%
+        border-radius: 0.4rem
+        border: 2px solid rgba(55, 65, 81, 1)
+        outline: 0
+        background-color: var(--inputtext)
+        padding: 0.75rem 1rem
+        color: rgba(243, 244, 246, 1)
+
+        &:focus, &:hover, &:active, &:visited, &:-webkit-autofill
+            background-color: &$primary-color
+
+    
+
+.luucky-signup
+    a
+        color: rgba(243, 244, 246, 1)
+        text-decoration: none
+        font-size: 0.9rem
+
+    a:hover
+        text-decoration: underline var(--blue)
+
+.luucky-submit
+    display: block
+    width: 100%
+    background-color: $text-hover
+    padding: 0.75rem
+    text-align: center
+    color: var(--text)
+    border: none
+    border-radius: 0.375rem
+    font-weight: 600
+    margin-top: 2.85rem
+    box-shadow: 0 3px 0 0 #1d3c6a
+    font-size: 1.05rem
+
+    &:hover
+        cursor: pointer
+
+.luucky-signup
+    padding-top: 1rem
+    text-align: center
+    font-size: 0.75rem
+    line-height: 1rem
+    color: rgba(156, 163, 175, 1)
+
+.two-images-choice
+    label *
+        width: 100%
+        cursor: pointer
+        padding: 0
+
+    input:checked + label
+        background-color: var(--selected)
+        border-radius: 35px
+        -moz-border-radius: 35px
+        -webkit-border-radius: 35px
+        transition: 0.1s
+
+    label
+        padding: 2px
+
+    input
+        display: none
+
+.green
+    background-color: #29ce32
+
+.red
+    background-color: #e73232
+
+.square-choice
+    min-width: 4vw
+    min-height: 4vw
+    border-radius: 35px
+    -moz-border-radius: 35px
+    -webkit-border-radius: 35px
