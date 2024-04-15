@@ -6,5 +6,14 @@ export interface AxiosInstance {
   }
 
   export interface AxiosCustomResponse {
-    token: string;
+    data: {
+      status: string;
+      message: string;
+      token?: string;
+      user?: {
+        username: string;
+        email: string;
+        role: string;
+      };
+    }
   }

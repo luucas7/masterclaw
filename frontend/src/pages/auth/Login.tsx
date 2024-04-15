@@ -14,8 +14,10 @@ import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 
 const AskLogin = async (values: FormInputFormat): Promise<AxiosCustomResponse> => {
-      const response = await axios.get<any, AxiosCustomResponse>(`${HOST}/auth/login`, { params: values });
-      return response;
+    console.log(values);
+        
+    const response = await axios.post<any, AxiosCustomResponse>(`${HOST}/auth/login`, values);
+    return response;
 
   };
 
@@ -31,6 +33,7 @@ const Login = () => {
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
 
     const onSubmit = async (event: React.FormEvent) => {
@@ -42,15 +45,24 @@ const Login = () => {
             finalResult.values.password = sha256(finalResult.values.password);
 
             try {
-                const response = await AskLogin(finalResult.values);
+                const response = (await AskLogin(finalResult.values)).data;
 
-                signIn({
+                console.log(response);
+                
+
+                if (response.status === "failed") {
+                    setError("Invalid username or password");
+                    setTimeout(() => {
+                        setError('');
+                    }, 2000);
+                }
+                /*signIn({
                     auth: {
                         token: response.token,
                         type: "Bearer",
                     }
                 });
-                navigate('/');
+                navigate('/');*/
 
             } catch (err) {
                 console.error(err);
@@ -75,14 +87,21 @@ const Login = () => {
                             <Box className="luucky-form" component={'form'} autoComplete="on" onSubmit={onSubmit} >
                                 <div className="luucky-input-group">
 
-                                    <TextField id="name" label="Name" variant="outlined" value={username} onChange={(e) => { setUsername(e.target.value) }}
-                                    required type="text" margin="normal" fullWidth autoFocus/>
+                                    <TextField id="name" label="Name" variant="outlined" value={username}
+                                    onChange={(e) => { setUsername(e.target.value) }}
+                                    required type="text" margin="normal" fullWidth autoFocus
+                                    error={error !== ''} helperText={error} 
+                                    />
 
                                 </div>
                                 <div className="luucky-input-group">
 
-                                    <TextField id="password" label="Password" variant="outlined" value={password} onChange={(e) => { setPassword(e.target.value) }}
-                                    required type="password" margin="normal" fullWidth />
+                                    <TextField id="password" label="Password" variant="outlined" value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }}
+                                    required type="password" margin="normal" fullWidth
+                                    error={error !== ''} helperText={error}
+                                    
+                                    />
 
                                 </div>
 

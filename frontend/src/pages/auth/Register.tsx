@@ -3,8 +3,8 @@ import "../../style/compiled/form.css";
 import { HOST } from "../../config";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Grid, TextField } from "@mui/material";
-import { useReducer } from "react";
+import { Alert, Box, Grid, Snackbar, TextField } from "@mui/material";
+import { useReducer, useState } from "react";
 import { AxiosCustomResponse } from "../../types/axios";
 import { sha256 } from "js-sha256";
 import { FormInputFormat, FormValidationResult, FormValidator } from "../../types/form";
@@ -35,13 +35,14 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const signIn = useSignIn(); 
 
     const [state, dispatch] = useReducer(reducer, { username: '', password: '', email: '' });
 
     const onDispatch = (type: string, value: string) => {
         dispatch({ type: type, value: value });
     }
+
+    const [snackbar, setSnackbar] = useState<string>('');
 
 
     const onSubmit = async (event: React.FormEvent) => {
@@ -53,16 +54,19 @@ const Register = () => {
             finalResult.values.password = sha256(finalResult.values.password);
 
             try {
-                const response = await axios.post<AxiosCustomResponse>(`${HOST}/auth/register`, finalResult.values);
-
-                signIn({
-                    auth: {
-                        token: response.token,
-                        type: "Bearer",
-                    }
-                });
-                navigate('/');
-
+                const response = (await axios.post<any, AxiosCustomResponse>(`${HOST}/auth/register`, finalResult.values)).data;
+                console.log(response);
+                
+                switch (response.status) {
+                    case 'failed':
+                        setSnackbar(response.message);
+                        break;
+                    case 'success':
+                        navigate('/login');
+                        break;
+                    default:
+                        break;
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -114,10 +118,25 @@ const Register = () => {
                             </p>
                            
                         </Box>
-                  
                         </Grid>
                     </Grid>
             </div>
+
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={snackbar !== ''}
+                autoHideDuration={2000}
+                onClose={() => { setSnackbar('') }}
+                message={snackbar}
+            >
+             <Alert
+             severity="error"
+             variant="filled"
+             sx={{ width: '100%' }}
+            
+             >{snackbar} </Alert>
+             
+             </Snackbar>
 
         </>
     );
