@@ -1,13 +1,23 @@
+/* eslint-disable no-useless-catch */
 import "../../style/compiled/form.css";
 import { HOST } from "../../config";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Grid, TextField } from "@mui/material";
 import { useState } from "react";
+import { AxiosCustomResponse } from "../../types/axios";
+import { sha256 } from "js-sha256";
+
 
 import { FormInputFormat, FormValidationResult, FormValidator } from "../../types/form";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 
+
+const AskLogin = async (values: FormInputFormat): Promise<AxiosCustomResponse> => {
+      const response = await axios.get<any, AxiosCustomResponse>(`${HOST}/auth/login`, { params: values });
+      return response;
+
+  };
 
 const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
    return new FormValidator().validateInputs(values);
@@ -23,16 +33,16 @@ const Login = () => {
     const [password, setPassword] = useState<string>('');
 
 
-    const onSubmit = () => {
+    const onSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
         const finalResult = FormInputValidation({ username: username, password: password});
-
         
         if (finalResult.result){
 
-            try {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const response = axios.get<any, AxiosCustomResponse>(`${HOST}/auth/login`, { params: finalResult.values });
+            finalResult.values.password = sha256(finalResult.values.password);
 
+            try {
+                const response = await AskLogin(finalResult.values);
 
                 signIn({
                     auth: {
@@ -43,7 +53,7 @@ const Login = () => {
                 navigate('/');
 
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
 
 
@@ -62,7 +72,7 @@ const Login = () => {
                 <Grid item lg={4} md={5} sm={6} xs={7}>
                         <Box className="luucky-form-container" >
                             <p className="luucky-title">Login</p>
-                            <Box className="luucky-form" component={'form'} autoComplete="on">
+                            <Box className="luucky-form" component={'form'} autoComplete="on" onSubmit={onSubmit} >
                                 <div className="luucky-input-group">
 
                                     <TextField id="name" label="Name" variant="outlined" value={username} onChange={(e) => { setUsername(e.target.value) }}
@@ -76,7 +86,7 @@ const Login = () => {
 
                                 </div>
 
-                                <input type="button" value="Login" id="submit" className="luucky-submit" onClick={onSubmit} />
+                                <input type="submit" value="Login" id="submit" className="luucky-submit"  />
                             </Box>
 
                             <div className="luucky-social-message">

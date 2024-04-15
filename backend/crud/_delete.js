@@ -8,4 +8,4 @@ const deleteOneDocument = async (collection, idDocument) => {
     }
 }
 
-export default { deleteOneDocument };
+module.exports = { deleteOneDocument };

@@ -6,4 +6,5 @@ export interface AxiosInstance {
   }
 
   export interface AxiosCustomResponse {
+    token: string;
   }

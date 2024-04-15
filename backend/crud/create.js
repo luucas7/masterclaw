@@ -7,4 +7,4 @@ const insertOneDocument = async (collection, data) => {
 };
 
 
-export default { insertOneDocument };
+module.exports = { insertOneDocument };

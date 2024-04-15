@@ -1,68 +1,106 @@
+/* eslint-disable no-useless-catch */
 import "../../style/compiled/form.css";
 import { HOST } from "../../config";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Grid, TextField } from "@mui/material";
+import { useReducer } from "react";
+import { AxiosCustomResponse } from "../../types/axios";
+import { sha256 } from "js-sha256";
+import { FormInputFormat, FormValidationResult, FormValidator } from "../../types/form";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+
+
+const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
+   return new FormValidator().validateInputs(values);
+}
+
+
+const reducer = (state: any, action: any) => {
+    switch (action.type) {
+        case 'username':
+            return { ...state, username: action.value };
+        case 'password':
+            return { ...state, password: action.value };
+        case 'email':
+            return { ...state, email: action.value };
+        default:
+            return state;
+    }
+
+}
 
 
 const Register = () => {
 
     const navigate = useNavigate();
 
-    const handleRegister = async (event) => {
+    const signIn = useSignIn(); 
+
+    const [state, dispatch] = useReducer(reducer, { username: '', password: '', email: '' });
+
+    const onDispatch = (type: string, value: string) => {
+        dispatch({ type: type, value: value });
+    }
+
+
+    const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        const finalResult = FormInputValidation({ username: state.username, password: state.password, email: state.email});
+        
+        if (finalResult.result){
 
-        const form = event.currentTarget;
+            finalResult.values.password = sha256(finalResult.values.password);
 
-        const username = form.elements.username.value;
-        const password = form.elements.password.value;
-        form.elements.password.value = '';
+            try {
+                const response = await axios.post<AxiosCustomResponse>(`${HOST}/auth/register`, finalResult.values);
 
-        const values = { username: username, password: password };
+                signIn({
+                    auth: {
+                        token: response.token,
+                        type: "Bearer",
+                    }
+                });
+                navigate('/');
 
-        console.log('Tentative de connexion');
+            } catch (err) {
+                console.error(err);
+            }
 
-        try {
-            const response = await axios.post(`${HOST}/Register`, values);
 
-
-            signIn({
-                token: response.data.token,
-                expiresIn: 36000,
-                tokenType: "Bearer",
-                authState: { username: values.username, id: response.data.id }
-            })
-            navigate('/');
-
-        } catch (err) {
-            console.log(err)
+        } else {
+            //TODO: Display error messages
+            console.log(finalResult.messages);
         }
+        
     };
 
     return (
         <>
             <div className="page-body flexbox">
 
-            <Grid container className="flexbox justify-center">
+            <Grid container display={"flex"} className="flexbox justify-center">
                 <Grid item lg={4} md={5} sm={6} xs={7}>
-                        <div className="luucky-form-container">
+                        <Box className="luucky-form-container" >
                             <p className="luucky-title">Register</p>
-                            <form className="luucky-form" onSubmit={handleRegister}>
+                            <Box className="luucky-form" component={'form'} autoComplete="on" onSubmit={onSubmit} >
                                 <div className="luucky-input-group">
-                                    <label htmlFor="username">Name</label>
-                                    <input type="text" name="username" id="username" placeholder="" />
+                                    <TextField id="name" label="Name" variant="outlined" value={state.username} onChange={(e) => { onDispatch('username', e.target.value)}}
+                                    required type="text" margin="normal" fullWidth autoFocus/>
                                 </div>
+
                                 <div className="luucky-input-group">
-                                    <label htmlFor="password">Password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        placeholder=""
-                                    />
+                                    <TextField id="email" label="Email" variant="outlined" value={state.email} onChange={(e) => { onDispatch('email', e.target.value)}}
+                                    required type="email" margin="normal" fullWidth />
                                 </div>
-                                <input type="submit" value="Register" id="submit" className="luucky-submit" />
-                            </form>
+
+                                <div className="luucky-input-group">
+                                    <TextField id="password" label="Password" variant="outlined" value={state.password} onChange={(e) => { onDispatch('password', e.target.value)}}
+                                    required type="password" margin="normal" fullWidth />
+                                </div>
+
+                                <input type="submit" value="Register" id="submit" className="luucky-submit"  />
+                            </Box>
 
                             <div className="luucky-social-message">
                                 <div className="luucky-line"></div>
@@ -75,7 +113,7 @@ const Register = () => {
                                 </Link>
                             </p>
                            
-                        </div>
+                        </Box>
                   
                         </Grid>
                     </Grid>

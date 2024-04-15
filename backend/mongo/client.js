@@ -2,7 +2,7 @@ require("dotenv").config('../.env');
 
 
 
-import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://luucky71:${process.env.MONGO}@clusterlucas.1spmbqv.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -21,4 +21,8 @@ async function run() {
 run().catch(console.dir);
 const database = client.db("triconquest");
 
+module.exports = {
+    client,
+    database
+}
 

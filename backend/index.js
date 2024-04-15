@@ -1,18 +1,68 @@
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-const sha256 = require('js-sha256');
-const jwt = require('jsonwebtoken');
+const {client, database} = require('./mongo/client');
+const app = require('./app');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const { create, _delete, read, update } = require('./crud');
 
-// Parse URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
+const usersCollection = database.collection("users");
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+app.get('/auth/login', async (req, res) => {
+    const { username, password } = req.query;
+    console.log('/auth/login', username, password);
+
+    const users = await read.fetchDocumentsWithMultipleRelations(usersCollection, [{
+        key: 'username',
+        value: username,
+        relation: 'equal'
+    }, {
+        key: 'password',
+        value: password,
+        relation: 'equal'
+    }]);
+
+    console.log(users);
+})
+
+app.get('/auth/register', async (req, res) => {
+
+    const { username, email, password } = req.query;
+    console.log('/auth/register', username, password);
+
+    const users = await read.fetchDocumentsWithMultipleRelations(usersCollection, [{
+        key: 'username',
+        value: username,
+        relation: 'equal'
+    },
+    {
+        key: 'email',
+        value: email,
+        relation: 'equal'
+    }]);
+
+    if (users.length > 0) {
+        res.send({ status: 'error', message: 'User already exists' });
+        return;
+    }
+
+    create.insertOneDocument(usersCollection, {
+        username,
+        email,
+        password
+    });
+
+});
 
 
 

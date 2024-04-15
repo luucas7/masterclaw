@@ -20,6 +20,19 @@ const fetchDocumentsWithRelation = async (collection, relation, projection) => {
     }
 };
 
+const fetchDocumentsWithMultipleRelations = async (collection, relations, projection) => {
+    try {
+        const conditions = relations.map(relation => ({ [relation.key]: { $eq: relation.value } }));
+        const document = await collection
+            .find({ $and: conditions })
+            .project(projection)
+            .toArray();
+        return document;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 const fetchDocuments = async (collection, projection) => {
     try {
         const documents = await collection
@@ -32,4 +45,4 @@ const fetchDocuments = async (collection, projection) => {
     }
 };
 
-export default { fetchOneValue, fetchDocumentsWithRelation, fetchDocuments };
+module.exports = { fetchOneValue, fetchDocumentsWithRelation, fetchDocuments, fetchDocumentsWithMultipleRelations };
