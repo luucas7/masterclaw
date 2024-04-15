@@ -1,84 +1,99 @@
 import "../../style/compiled/form.css";
 import { HOST } from "../../config";
-import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import { Col, Container, Row } from "react-bootstrap";
+import axios, { AxiosResponse } from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { Box, Grid, TextField } from "@mui/material";
+import { useState } from "react";
 
+import { FormInputFormat, FormValidationResult, FormValidator } from "../../types/form";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+
+
+const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
+   return new FormValidator().validateInputs(values);
+}
 
 const Login = () => {
 
     const navigate = useNavigate();
 
-    const handleLogin = async (event) => {
-        event.preventDefault();
+    const signIn = useSignIn(); 
 
-        const form = event.currentTarget;
-
-        const username = form.elements.username.value;
-        const password = form.elements.password.value;
-        form.elements.password.value = '';
-
-        const values = { username: username, password: password };
-
-        console.log('Tentative de connexion');
-
-        try {
-            const response = await axios.post(`${HOST}/login`, values);
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
 
-            signIn({
-                token: response.data.token,
-                expiresIn: 36000,
-                tokenType: "Bearer",
-                authState: { username: values.username, id: response.data.id }
-            })
-            navigate('/');
+    const onSubmit = () => {
+        const finalResult = FormInputValidation({ username: username, password: password});
 
-        } catch (err) {
-            console.log(err)
+        
+        if (finalResult.result){
+
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const response = axios.get<any, AxiosCustomResponse>(`${HOST}/auth/login`, { params: finalResult.values });
+
+
+                signIn({
+                    auth: {
+                        token: response.token,
+                        type: "Bearer",
+                    }
+                });
+                navigate('/');
+
+            } catch (err) {
+                console.log(err);
+            }
+
+
+        } else {
+            //TODO: Display error messages
+            console.log(finalResult.messages);
         }
+        
     };
 
     return (
         <>
-            <div className="page-body flexbox justify-center">
+            <div className="page-body flexbox">
 
-            <Container className="">
-                        <Row className="flexbox justify-center">
-                        <Col md={6} className="luucky-form-container ">
-                            <p className="luucky-title">Connexion</p>
-                            <form className="luucky-form" onSubmit={handleLogin}>
+            <Grid container display={"flex"} className="flexbox justify-center">
+                <Grid item lg={4} md={5} sm={6} xs={7}>
+                        <Box className="luucky-form-container" >
+                            <p className="luucky-title">Login</p>
+                            <Box className="luucky-form" component={'form'} autoComplete="on">
                                 <div className="luucky-input-group">
-                                    <label htmlFor="username">Pseudo</label>
-                                    <input type="text" name="username" id="username" placeholder="" />
+
+                                    <TextField id="name" label="Name" variant="outlined" value={username} onChange={(e) => { setUsername(e.target.value) }}
+                                    required type="text" margin="normal" fullWidth autoFocus/>
+
                                 </div>
                                 <div className="luucky-input-group">
-                                    <label htmlFor="password">Mot de passe</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        placeholder=""
-                                    />
+
+                                    <TextField id="password" label="Password" variant="outlined" value={password} onChange={(e) => { setPassword(e.target.value) }}
+                                    required type="password" margin="normal" fullWidth />
+
                                 </div>
-                                <input type="submit" value="Se connecter" id="submit" className="luucky-submit" />
-                            </form>
+
+                                <input type="button" value="Login" id="submit" className="luucky-submit" onClick={onSubmit} />
+                            </Box>
 
                             <div className="luucky-social-message">
                                 <div className="luucky-line"></div>
                             </div>
 
                             <p className="luucky-signup">
-                                Pas de compte ?
+                                No account yet ?&nbsp;
                                 <Link to="/register">
-                                    &nbsp;S'inscrire
+                                    Register
                                 </Link>
                             </p>
                            
-                        </Col>
-                        </Row>
-          
-            </Container>
+                        </Box>
+                  
+                        </Grid>
+                    </Grid>
             </div>
 
         </>
