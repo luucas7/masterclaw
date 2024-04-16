@@ -18,18 +18,39 @@ const auth_login = async (req, res) => {
         key: 'password',
         value: password,
         relation: 'equal'
-    }], "and");
+    }], {}, "and");
+
+    if (users === undefined) {
+        res.send({ status: 'error', message: 'An error occured, Code : E100' });
+        return;
+    }
 
     switch (users.length) {
         case 0:
-            res.send({ status: 'error', message: 'User not found' });
+            res.send({ status: 'error', message: 'An error occured, Code : E101' });
             break;
         case 1:
-            
-            res.send({ status: 'success', message: 'User found' });
+
+            console.log(users[0]);
+
+            const jwt = {
+                token : generateToken({ username, email, uuid }),
+                tokenType : 'Bearer',
+                expiresIn : 36000
+            }
+            const user = {
+                username,
+                email,
+                uuid
+            }
+
+            const result = await create.createDocument(usersCollection, { username, email, password, uuid });
+
+            res.send({ status: 'success', message: 'Account created', jwt: jwt, user: user});
             break;
+
         default:
-            res.send({ status: 'error', message: 'Multiple users found' });
+            res.send({ status: 'error', message: 'Multiple users found, Code : E102' });
             break;
     }
 
@@ -54,9 +75,8 @@ const auth_register = async (req, res) => {
         relation: 'equal'
     }], {}, "$or");
 
-    console.log(users);
     if (users === undefined) {
-        res.send({ status: 'error', message: 'An error occured' });
+        res.send({ status: 'error', message: 'An error occured, Code : E103' });
         return;
     }
     
@@ -64,13 +84,11 @@ const auth_register = async (req, res) => {
         case 0:
 
             const uuid = generateUUID();
-
             const jwt = {
                 token : generateToken({ username, email, uuid }),
                 tokenType : 'Bearer',
                 expiresIn : 36000
             }
-
             const user = {
                 username,
                 email,
@@ -81,11 +99,13 @@ const auth_register = async (req, res) => {
 
             res.send({ status: 'success', message: 'Account created', jwt: jwt, user: user});
             break;
+
         case 1:
-            res.send({ status: 'error', message: 'An error occured' });
+            res.send({ status: 'error', message: 'An error occured, Code : E104' });
             break;
+            
         default:
-            res.send({ status: 'error', message: 'Multiple users found' });
+            res.send({ status: 'error', message: 'Multiple users found, Code : E105' });
             break;
     }
 
