@@ -1,4 +1,4 @@
-const insertOneDocument = async (collection, data) => {
+const createDocument = async (collection, data) => {
     try {
         collection.insertOne(data);
     } catch (err) {
@@ -7,4 +7,4 @@ const insertOneDocument = async (collection, data) => {
 };
 
 
-module.exports = { insertOneDocument };
+module.exports = { createDocument };

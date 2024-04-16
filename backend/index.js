@@ -1,12 +1,6 @@
-const app = require('./app');
+const app = require('./server/app');
 
-const jwt = require('jsonwebtoken');
-
-const { auth_login, auth_register } = require('./endpoints');
-
-
-
-
+const { auth_login, auth_register } = require('./server/endpoints');
 
 
 
@@ -25,4 +19,3 @@ app.post('/auth/register', auth_register);
 
 
 app.listen(8081, () => {});
-

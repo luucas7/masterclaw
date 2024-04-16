@@ -20,11 +20,11 @@ const fetchDocumentsWithRelation = async (collection, relation, projection) => {
     }
 };
 
-const fetchDocumentsWithMultipleRelations = async (collection, relations, projection) => {
+const fetchDocumentsWithMultipleRelations = async (collection, relations, projection, condition) => {
     try {
         const conditions = relations.map(relation => ({ [relation.key]: { $eq: relation.value } }));
         const document = await collection
-            .find({ $and: conditions })
+            .find({ [condition] : conditions})
             .project(projection)
             .toArray();
         return document;
@@ -33,7 +33,7 @@ const fetchDocumentsWithMultipleRelations = async (collection, relations, projec
     }
 };
 
-const fetchDocuments = async (collection, projection) => {
+const fetchDocuments = async (collection, projection = {}) => {
     try {
         const documents = await collection
             .find()
