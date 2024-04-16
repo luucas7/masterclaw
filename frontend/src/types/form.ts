@@ -36,13 +36,12 @@ export class FormValidator implements FormInputValidation{
         
         const username = this.validateUsername(values.username);
         const password = this.validatePassword(values.password);
-        let email = 'ok';
-        if (values.email) email = this.validateEmail(values.email);
+        const email = values.email ? this.validateEmail(values.email) : 'ok';
         
 
         return {
             messages: {
-                username: username ,
+                username: username,
                 password: password,
                 email: email
             },

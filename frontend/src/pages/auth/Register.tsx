@@ -1,19 +1,11 @@
 /* eslint-disable no-useless-catch */
-import "../../style/compiled/form.css";
-import { HOST } from "../../config";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { Alert, Box, Grid, Snackbar, TextField } from "@mui/material";
-import { useReducer, useState } from "react";
-import { AxiosCustomResponse } from "../../types/axios";
-import { sha256 } from "js-sha256";
-import { FormInputFormat, FormValidationResult, FormValidator } from "../../types/form";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
-
-
-const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
-   return new FormValidator().validateInputs(values);
-}
+import '../../style/compiled/form.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { Box, Grid, TextField } from '@mui/material';
+import { useReducer, useState } from 'react';
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import { useSnackbar } from '../../hooks/useSnackbar';
+import { authentification } from '../../auth/authentification';
 
 
 const reducer = (state: any, action: any) => {
@@ -27,14 +19,10 @@ const reducer = (state: any, action: any) => {
         default:
             return state;
     }
-
 }
 
 
 const Register = () => {
-
-    const navigate = useNavigate();
-
 
     const [state, dispatch] = useReducer(reducer, { username: '', password: '', email: '' });
 
@@ -42,77 +30,68 @@ const Register = () => {
         dispatch({ type: type, value: value });
     }
 
-    const [snackbar, setSnackbar] = useState<string>('');
+    const navigate = useNavigate();
+    const signIn = useSignIn();
+
+
+    const [ submitting, setSubmitting ] = useState<boolean>(false);
+    const [ error, setError ] = useState<boolean>(false);
+    const { openSnackbar } = useSnackbar();
 
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const finalResult = FormInputValidation({ username: state.username, password: state.password, email: state.email});
-        
-        if (finalResult.result){
 
-            finalResult.values.password = sha256(finalResult.values.password);
+        setSubmitting(true);
 
-            try {
-                const response = (await axios.post<any, AxiosCustomResponse>(`${HOST}/auth/register`, finalResult.values)).data;
-                console.log(response);
-                
-                switch (response.status) {
-                    case 'failed':
-                        setSnackbar(response.message);
-                        break;
-                    case 'success':
-                        navigate('/login');
-                        break;
-                    default:
-                        break;
-                }
-            } catch (err) {
-                console.error(err);
-            }
-
-
-        } else {
-            //TODO: Display error messages
-            console.log(finalResult.messages);
-        }
-        
-    };
+        await authentification({
+            username: state.username,
+            password: state.password,
+            email: state.email,
+            path:'register',
+            navigate: navigate,
+            signIn: signIn,
+            showOutput: openSnackbar,
+            gotError: setError
+    });
+    setSubmitting(false);
+}
 
     return (
         <>
-            <div className="page-body flexbox">
+            <div className='page-body flexbox'>
 
-            <Grid container display={"flex"} className="flexbox justify-center">
+            <Grid container display={'flex'} className='flexbox justify-center'>
                 <Grid item lg={4} md={5} sm={6} xs={7}>
-                        <Box className="luucky-form-container" >
-                            <p className="luucky-title">Register</p>
-                            <Box className="luucky-form" component={'form'} autoComplete="on" onSubmit={onSubmit} >
-                                <div className="luucky-input-group">
-                                    <TextField id="name" label="Name" variant="outlined" value={state.username} onChange={(e) => { onDispatch('username', e.target.value)}}
-                                    required type="text" margin="normal" fullWidth autoFocus/>
+                        <Box className='luucky-form-container'>
+                            <p className='luucky-title'>Register</p>
+                            <Box className='luucky-form' component={'form'} autoComplete='on' onSubmit={onSubmit} onChange={() => {error && setError(false)}} >
+
+                                <div className='luucky-input-group'>
+                                    <TextField id='email' label='Email' variant='outlined' value={state.email} onChange={(e) => { onDispatch('email', e.target.value)}}
+                                    required type='email' margin='normal' fullWidth error={error} />
                                 </div>
 
-                                <div className="luucky-input-group">
-                                    <TextField id="email" label="Email" variant="outlined" value={state.email} onChange={(e) => { onDispatch('email', e.target.value)}}
-                                    required type="email" margin="normal" fullWidth />
+                                <div className='luucky-input-group'>
+                                    <TextField id='name' label='Name' variant='outlined' value={state.username} onChange={(e) => { onDispatch('username', e.target.value)}}
+                                    required type='text' margin='normal' fullWidth autoFocus error={error}/>
                                 </div>
 
-                                <div className="luucky-input-group">
-                                    <TextField id="password" label="Password" variant="outlined" value={state.password} onChange={(e) => { onDispatch('password', e.target.value)}}
-                                    required type="password" margin="normal" fullWidth />
+                                <div className='luucky-input-group'>
+                                    <TextField id='password' label='Password' variant='outlined' value={state.password} onChange={(e) => { onDispatch('password', e.target.value)}}
+                                    required type='password' margin='normal' fullWidth error={error}/>
                                 </div>
 
-                                <input type="submit" value="Register" id="submit" className="luucky-submit"  />
+                                <input type='submit' value='Register' id='submit' className={'luucky-submit'} disabled={submitting} />
                             </Box>
 
-                            <div className="luucky-social-message">
-                                <div className="luucky-line"></div>
+                            <div className='luucky-social-message'>
+                                <div className='luucky-line'></div>
                             </div>
 
-                            <p className="luucky-signup">
+                            <p className='luucky-signup'>
                                 You have an account ?&nbsp;
-                                <Link to="/register">
+                                <Link to='/login'>
                                     Login
                                 </Link>
                             </p>
@@ -121,23 +100,6 @@ const Register = () => {
                         </Grid>
                     </Grid>
             </div>
-
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={snackbar !== ''}
-                autoHideDuration={2000}
-                onClose={() => { setSnackbar('') }}
-                message={snackbar}
-            >
-             <Alert
-             severity="error"
-             variant="filled"
-             sx={{ width: '100%' }}
-            
-             >{snackbar} </Alert>
-             
-             </Snackbar>
-
         </>
     );
 };

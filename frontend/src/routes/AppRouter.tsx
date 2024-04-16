@@ -7,14 +7,16 @@ import Register from '../pages/auth/Register'
 import Cards from '../pages/cards/Cards';
 import AddCard from '../pages/cards/AddCard';
 import Header from '../components/Header'
+import GlobalSnackbar from '../components/GlobalSnackbar'
 
 
-const AppRouteur = () => {
+const AppRouter = () => {
 
     
     return (
         <BrowserRouter>
             <Header />
+            <GlobalSnackbar />
             <Routes>
 
 
@@ -35,4 +37,4 @@ const AppRouteur = () => {
         </BrowserRouter>
     )
 }
-export default AppRouteur
+export default AppRouter

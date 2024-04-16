@@ -1,6 +1,7 @@
 import createStore from "react-auth-kit/createStore";
 import AppRouter from "./routes/AppRouter";
 import AuthProvider from "react-auth-kit";
+import {SnackbarProvider} from "./context/SnackbarProvider";
 
 const App = () => {
 
@@ -19,7 +20,9 @@ const App = () => {
   return (
     <>
       <AuthProvider store={store}>
-        <AppRouter/>
+        <SnackbarProvider>
+          <AppRouter />
+        </SnackbarProvider>
       </AuthProvider>
     </>
   );
