@@ -54,6 +54,9 @@ const Register = () => {
 
     setSubmitting(true);
 
+    console.log(state.email);
+    
+
     await authentification({
       username: state.username,
       password: state.password,

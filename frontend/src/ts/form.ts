@@ -6,7 +6,6 @@ export interface FormInputFormat {
     email?: string;
 }
 
-
 export interface FormInputValidation{
     validateUsername: (username: string) =>  string;
     validatePassword: (password: string) =>  string;
@@ -19,9 +18,7 @@ export interface FormValidationResult {
     values: FormInputFormat;
 }
 
-
 export class FormValidator implements FormInputValidation{
-
 
     static readonly usernameRegex = new RegExp('^[a-zA-Z0-9._-]{3,20}$');
     static readonly passwordRegex = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,20}$');
@@ -34,15 +31,15 @@ export class FormValidator implements FormInputValidation{
         
         const username = sanitize(values.username);
         const password = sanitize(values.password);
-        let email = '';
+
 
         const isUsernameValid = this.validateUsername(username);
         const isPasswordValid = this.validatePassword(password);
         let isEmailValid = 'ok';
 
         if (values.email !== undefined) {
-            email = sanitize(values.email);
-            isEmailValid = this.validateEmail(email);
+
+            isEmailValid = this.validateEmail(values.email);
         }
 
         return {
@@ -52,7 +49,7 @@ export class FormValidator implements FormInputValidation{
                 email: isEmailValid
             },
             result: isUsernameValid === 'ok' && isPasswordValid === 'ok' && isEmailValid === 'ok',
-            values: { username: username, password: password, email: email}
+            values: { username: username, password: password, email: values.email}
         }
 
     }

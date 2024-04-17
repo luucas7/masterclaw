@@ -22,43 +22,48 @@ export const authentification = async ({username, password, email, path, navigat
 
     const finalResult = FormInputValidation({ username: username, password: password, email: email});
         
+    console.log(finalResult);
+    
         if (!finalResult.result) {            
             showOutput({ message: 'An error occured, Code : E106', type: 'error' });
             gotError(true);
             return;
         }
 
-            finalResult.values.password = sha256(finalResult.values.password);
-            try {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const response = (await axios.post<any, AxiosCustomAuthResponse>(`${HOST}/auth/${path}`, finalResult.values)).data;
+        finalResult.values.password = sha256(finalResult.values.password);
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response = (await axios.post<any, AxiosCustomAuthResponse>(`${HOST}/auth/${path}`, finalResult.values)).data;
+                
+            console.log(response);
+            switch (response.status) {
+
+                case 'success':
+                    console.log(response.jwt.token, response.jwt.tokenType, response.user.username, response.user.uuid);
                     
-                console.log(response);
-                switch (response.status) {
+                    if (!signIn({
+                        auth: {
+                            token: response.jwt.token,
+                            type: response.jwt.tokenType,
 
-                    case 'success':
-                        console.log(response.jwt.token, response.jwt.tokenType, response.user.username, response.user.uuid);
-                        
-                        if (!signIn({
-                            auth: {
-                                token: response.jwt.token,
-                                type: response.jwt.tokenType,
+                        },
+                        userState: { name: response.user.username, uuid: response.user.uuid },
+                    })) { showOutput({ message: 'An error occured, Code : E109', type: 'error' }); return; }
 
-                            },
-                            userState: { name: response.user.username, uuid: response.user.uuid },
-                        })) { showOutput({ message: 'An error occured, Code : E109', type: 'error' }); return; }
+                    navigate('/');
+                    // TODO Listening on possible fix for this
+                    window.location.reload();
 
-                        navigate('/');
-                        showOutput({ message: response.message, type: 'success' });
-                        break;
-                    default:
-                        showOutput({ message: response.message, type: 'error' });
-                        gotError(true);
-                        break;
-                }
-
-            } catch (err) {
-                showOutput({ message: "An error occured, Code : E110", type: 'error' });
-                gotError(true);
+                    showOutput({ message: response.message, type: 'success' });
+                    break;
+                default:
+                    showOutput({ message: response.message, type: 'error' });
+                    gotError(true);
+                    break;
             }
+
+        } catch (err) {
+            showOutput({ message: "An error occured, Code : E110", type: 'error' });
+            gotError(true);
+        }
 }
