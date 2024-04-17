@@ -1,24 +1,14 @@
 
-const { create, drop, read, update } = require('./crud');
-
-const {client, database} = require('./client');
-const usersCollection = database.collection('users');
-const { generateToken, generateUUID } = require('./auth');
+const { create, drop, read, update } = require('../crud');
+const { generateToken, generateUUID } = require('../misc/jwt');
+const { User, Deck } = require('../mongo/models');
 
 
 const auth_login = async (req, res) => {
     const { username, password } = req.body;
     console.log('/auth/login', username, password);
 
-    const users = await read.fetchDocumentsWithMultipleRelations(usersCollection, [{
-        key: 'username',
-        value: username,
-        relation: 'equal'
-    }, {
-        key: 'password',
-        value: password,
-        relation: 'equal'
-    }], {}, "$and");
+    const users = await read.readDocuments({ $and: [{ username: username }, { password: password }] }, User);
 
     if (users === undefined) {
         res.send({ status: 'error', message: 'An error occured, Code : E100' });
@@ -57,26 +47,15 @@ const auth_login = async (req, res) => {
 
 }
 
-
-
-
 const auth_register = async (req, res) => {
 
     const { username, email, password } = req.body;
     console.log('/auth/register', username, password);
 
-    const users = await read.fetchDocumentsWithMultipleRelations(usersCollection, [{
-        key: 'username',
-        value: username,
-        relation: 'equal'
-    },
-    {
-        key: 'email',
-        value: email,
-        relation: 'equal'
-    }], {}, "$or");
+    const users = await read.readDocuments({ $or: [{username: username, email: email}] }, User);
+    console.log(users);
 
-    if (users === undefined) {
+    if (users === undefined) { 
         res.send({ status: 'error', message: 'An error occured, Code : E103' });
         return;
     }
@@ -96,8 +75,7 @@ const auth_register = async (req, res) => {
                 uuid
             }
 
-            const result = await create.createDocument(usersCollection, { username, email, password, uuid });
-
+            await create.createDocument({ username:username, email:email, password:password, uuid:uuid}, User);
             res.send({ status: 'success', message: 'Account created', jwt: jwt, user: user});
             break;
 
@@ -113,10 +91,7 @@ const auth_register = async (req, res) => {
 
 }
 
-
-
-
-module.exports = {
-    auth_login,
-    auth_register
-}
+module.exports =  {
+        auth_login,
+        auth_register
+    }

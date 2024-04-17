@@ -1,7 +1,15 @@
-const createDocument = async (collection, data) => {
+const { Model } = require("mongoose");
+
+/** 
+ * 
+ * @param {Object} document the document to be created in the database
+ * @param {Model} model the model to be used to create the document
+ * 
+ **/
+const createDocument = async (document, model) => {
     try {
-        collection.insertOne(data);
-    } catch (err) {
+        model.create(document);
+        } catch (err) {
         console.error(err);
     }
 };

@@ -1,48 +1,20 @@
+const { Model } = require("mongoose");
 
-const fetchOneValue = async (collection, option) => {
+
+
+/**
+ * Fetches documents from the database
+ * @param {Object} query - The query to search for documents, { key: value }
+ * @param {Model} model - The model to search for documents in, 
+ * 
+ * @returns {Array} - An array of documents
+ */
+const readDocuments = async (query, model) => {
     try {
-        const document = await collection.findOne();
-        return document[option];
+        return documents = await model.find(query);
     } catch (err) {
         console.error(err);
     }
 };
 
-const fetchDocumentsWithRelation = async (collection, relation, projection) => {
-    try {
-        const document = await collection
-            .find({ [relation.key]: { $eq: relation.value } })
-            .project(projection)
-            .toArray();
-        return document;
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-const fetchDocumentsWithMultipleRelations = async (collection, relations, projection, condition) => {
-    try {
-        const conditions = relations.map(relation => ({ [relation.key]: { $eq: relation.value } }));
-        const document = await collection
-            .find({ [condition] : conditions})
-            .project(projection)
-            .toArray();
-        return document;
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-const fetchDocuments = async (collection, projection = {}) => {
-    try {
-        const documents = await collection
-            .find()
-            .project(projection)
-            .toArray();
-        return documents;
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-module.exports = { fetchOneValue, fetchDocumentsWithRelation, fetchDocuments, fetchDocumentsWithMultipleRelations };
+module.exports = { readDocuments };
