@@ -17,23 +17,21 @@ const AppRouter = () => {
         <BrowserRouter>
             <Header />
             <GlobalSnackbar />
+            <div className='page-body flexbox'>
+
             <Routes>
-
-
                 
                 <Route path='/' element={<Home />} />
                 <Route path='/cards' element={<Cards />} />
 
-                
                 <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
 
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/logout' element={<Logout />} />
 
-
-
             </Routes>
+            </div>
         </BrowserRouter>
     )
 }

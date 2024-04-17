@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SnackbarContent, SnackbarContextType } from '../types/output';
+import { SnackbarContent, SnackbarContextType } from '../ts/output';
 
 const baseSnackbarContent: SnackbarContent = {
     open: false,

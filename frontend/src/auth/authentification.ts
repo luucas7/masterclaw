@@ -1,9 +1,9 @@
-import { AxiosCustomAuthResponse } from '../types/axios';
+import { AxiosCustomAuthResponse } from '../ts/axios';
 import { sha256 } from 'js-sha256';
-import { FormInputFormat, FormValidationResult, FormValidator } from '../types/form';
+import { FormInputFormat, FormValidationResult, FormValidator } from '../ts/form';
 import axios from 'axios';
 import { HOST } from '../config';
-import { OutputContent } from '../types/output';
+import { OutputContent } from '../ts/output';
 
 const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
     return new FormValidator().validateInputs(values);
@@ -15,13 +15,14 @@ export const authentification = async ({username, password, email, path, navigat
     email?: string,
     path: string,
     navigate: (path: string) => void,
-    signIn: (data: { auth: { token: string; type: string; }; userState: { name: string; uid: string; }; }) => boolean,
+    signIn: (data: { auth: { token: string; type: string; }; userState: { name: string; uuid: string; }; }) => boolean,
     showOutput: (content: OutputContent) => void,
     gotError: (error: boolean) => void
 }): Promise<void> => {
+
     const finalResult = FormInputValidation({ username: username, password: password, email: email});
         
-        if (!finalResult.result) {
+        if (!finalResult.result) {            
             showOutput({ message: 'An error occured, Code : E106', type: 'error' });
             gotError(true);
             return;
@@ -31,16 +32,20 @@ export const authentification = async ({username, password, email, path, navigat
             try {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const response = (await axios.post<any, AxiosCustomAuthResponse>(`${HOST}/auth/${path}`, finalResult.values)).data;
-                                
+                    
+                console.log(response);
                 switch (response.status) {
 
                     case 'success':
+                        console.log(response.jwt.token, response.jwt.tokenType, response.user.username, response.user.uuid);
+                        
                         if (!signIn({
                             auth: {
                                 token: response.jwt.token,
                                 type: response.jwt.tokenType,
+
                             },
-                            userState: { name: response.user.username, uid: response.user.uuid },
+                            userState: { name: response.user.username, uuid: response.user.uuid },
                         })) { showOutput({ message: 'An error occured, Code : E109', type: 'error' }); return; }
 
                         navigate('/');
@@ -53,6 +58,7 @@ export const authentification = async ({username, password, email, path, navigat
                 }
 
             } catch (err) {
-                console.error(err);
+                showOutput({ message: "An error occured, Code : E110", type: 'error' });
+                gotError(true);
             }
 }

@@ -1,4 +1,4 @@
-
+import { sanitize } from './sanitizer'
 
 export interface FormInputFormat {
     username: string;
@@ -32,21 +32,27 @@ export class FormValidator implements FormInputValidation{
 
     validateInputs(values : FormInputFormat): FormValidationResult {
         
-        console.log(values);
-        
-        const username = this.validateUsername(values.username);
-        const password = this.validatePassword(values.password);
-        const email = values.email ? this.validateEmail(values.email) : 'ok';
-        
+        const username = sanitize(values.username);
+        const password = sanitize(values.password);
+        let email = '';
+
+        const isUsernameValid = this.validateUsername(username);
+        const isPasswordValid = this.validatePassword(password);
+        let isEmailValid = 'ok';
+
+        if (values.email !== undefined) {
+            email = sanitize(values.email);
+            isEmailValid = this.validateEmail(email);
+        }
 
         return {
             messages: {
-                username: username,
-                password: password,
-                email: email
+                username: isUsernameValid,
+                password: isPasswordValid,
+                email: isEmailValid
             },
-            result: username === 'ok' && password === 'ok' && email === 'ok',
-            values: values
+            result: isUsernameValid === 'ok' && isPasswordValid === 'ok' && isEmailValid === 'ok',
+            values: { username: username, password: password, email: email}
         }
 
     }
