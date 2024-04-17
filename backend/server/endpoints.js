@@ -1,5 +1,5 @@
 
-const { create, _delete, read, update } = require('./crud');
+const { create, drop, read, update } = require('./crud');
 
 const {client, database} = require('./client');
 const usersCollection = database.collection('users');
@@ -18,12 +18,14 @@ const auth_login = async (req, res) => {
         key: 'password',
         value: password,
         relation: 'equal'
-    }], {}, "and");
+    }], {}, "$and");
 
     if (users === undefined) {
         res.send({ status: 'error', message: 'An error occured, Code : E100' });
         return;
     }
+
+    console.log(users);
 
     switch (users.length) {
         case 0:
@@ -31,7 +33,8 @@ const auth_login = async (req, res) => {
             break;
         case 1:
 
-            console.log(users[0]);
+            
+            const { email, uuid } = users[0];
 
             const jwt = {
                 token : generateToken({ username, email, uuid }),
@@ -43,10 +46,8 @@ const auth_login = async (req, res) => {
                 email,
                 uuid
             }
-
-            const result = await create.createDocument(usersCollection, { username, email, password, uuid });
-
-            res.send({ status: 'success', message: 'Account created', jwt: jwt, user: user});
+            
+            res.send({ status: 'success', message: 'Succesfully connected', jwt: jwt, user: user});
             break;
 
         default:

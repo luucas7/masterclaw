@@ -2,7 +2,7 @@
 
 ## Technologies
 
-[![languages](https://skillicons.dev/icons?i=vite,sass,ts,docker,react,mui,nodejs,mongo,nginx,js,html,rust,npm)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=vite,sass,ts,react,mui,nodejs,mongo,js,html,rust,npm)](https://skillicons.dev)
 
 ## Development
 

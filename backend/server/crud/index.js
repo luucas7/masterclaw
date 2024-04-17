@@ -3,11 +3,11 @@
 const read = require("./read.js");
 const update = require("./update.js");
 const create = require("./create.js");
-const _delete = require("./_delete.js");
+const drop = require("./drop.js");
 
 
 module.exports = {
-    _delete,
+    drop,
     read,
     update,
     create
