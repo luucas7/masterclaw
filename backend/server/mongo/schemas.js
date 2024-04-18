@@ -110,19 +110,22 @@ const cardSchema = mongoose.Schema({
             }
         }
     },
-    konami_id: {
-        type: Number,
+    passcode: {
+        type: String,
         required: true,
         unique: true,
         validate(value) {
-            if (!validator.isInt(value)) {
-                throw new Error('Konami ID must be an integer');
+            if (!validator.isNumeric(value)) {
+                throw new Error('Passcode must only contain numbers');
+            }
+            if (!validator.isLength(value, { min: 8, max: 8 })) {
+                throw new Error('Passcode must be 8 characters long');
             }
         }
     },
     
 
-    }
+    });
 
 
 
