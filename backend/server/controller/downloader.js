@@ -19,5 +19,10 @@ downloader.downloadImage = (url, filepath) => {
     });
 }
 
+downloader.putInStorage = (card) => {
+    console.log(card);
+
+}
+
 
 module.exports = downloader;

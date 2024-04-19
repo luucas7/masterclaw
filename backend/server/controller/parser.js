@@ -7,7 +7,7 @@ parser.takeNecessaryData = async (resp) => {
 
     const data = JSON.parse(resp);
 
-    return data.map(item => ({
+    return data.data.map(item => ({
         id: item.id,
         name: item.name,
         archetype: item.archetype,

@@ -123,15 +123,34 @@ const cardSchema = mongoose.Schema({
             }
         }
     },
-    
-
     });
+
+const querySchema = mongoose.Schema({
+    query: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isLength(value, { min: 3 })) {
+                throw new Error('Query must be at least 3 characters long');
+            }
+
+        }
+    },
+
+    creation_date: {
+        type: Date,
+        default: Date.now,
+    }
+});
 
 
 
 module.exports = {
     schemas: {
         userSchema,
-        deckSchema
+        deckSchema,
+        cardSchema,
+        querySchema
+
     }
 };

@@ -1,6 +1,12 @@
-const manager = require('./server/controller');
+const manager = require('./server/controller/manager');
+
+const test = async () => {
+const infos = await manager.getCardInfo('dark')
+console.log(infos)
+}
 
 
-console.log(manager.checkPathToFile('server/controller/manager.js'));
+test()
+
 
 //https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=dark

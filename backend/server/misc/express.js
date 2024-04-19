@@ -15,4 +15,7 @@ app.use(cors({
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
+
+app.use('/images/cards', express.static('public/cards'));
+
 module.exports = app;
