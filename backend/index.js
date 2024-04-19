@@ -1,4 +1,5 @@
 const app = require('./server/misc/express');
+require('dotenv').config('.env');
 
 const {auth, cards} = require('./server/endpoints');
 
@@ -12,4 +13,4 @@ app.post('/auth/register', auth.auth_register);
 
 app.post('/cards/add', cards.cards_add);
 
-app.listen(8081, () => {});
+app.listen(process.env.SERVER_PORT, () => {});

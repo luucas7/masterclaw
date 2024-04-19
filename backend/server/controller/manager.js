@@ -5,6 +5,7 @@ const { Card, Query } = require('../mongo/models');
 const { create } = require('../crud');
 const { parser } = require('./parser');
 const string = require('./string');
+const path = require('path');
 
 
 const manager = {};
@@ -38,12 +39,8 @@ manager.saveCard = async (card) => {
 
 }
 
-manager.fetchCards = async (regex) => {
-
-    await Card.find({ name: regex });
-
-    downloader.putInStorage(name);
-
+manager.fetchCards = async (fname) => {
+    downloader.fetchCards(fname,  '../../public/cards');
 }
 
 manager.getSavedCards = async (regex) => {
@@ -63,16 +60,17 @@ manager.getCardInfo = async (name) => {
     const result = {};
 
     const cache = await manager.alreadySearched(name);
-        const regex = new RegExp(cache[0], 'i');
 
     if (cache.length > 0) {
         // We already stored the card
         console.log(cache); 
 
+        const regex = new RegExp(cache[0], 'i');
+
         result = await manager.getSavedCards(regex);
     } else {
-
-        manager.fetchCards(regex);
+        const fname = string.formatName(name);
+        manager.fetchCards(fname);
 
     }
 }

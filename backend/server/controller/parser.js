@@ -5,13 +5,15 @@ const parser = {}
 
 parser.takeNecessaryData = async (resp) => {
 
-    const data = JSON.parse(resp);
+
+
+    const data = await resp.json();
 
     return data.data.map(item => ({
-        id: item.id,
+        passcode: item.id,
         name: item.name,
         archetype: item.archetype,
-        image_url_small: item.card_images[0]?.image_url_small
+        image_url: item.card_images[0]?.image_url_small
     }));
 }
 

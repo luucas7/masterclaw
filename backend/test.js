@@ -1,8 +1,10 @@
 const manager = require('./server/controller/manager');
+const downloader = require('./server/controller/downloader');
+
 
 const test = async () => {
-const infos = await manager.getCardInfo('dark')
-console.log(infos)
+
+    await downloader.fetchCards('Skilled dark magician', 'public/cards');
 }
 
 
