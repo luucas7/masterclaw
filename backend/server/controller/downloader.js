@@ -2,6 +2,7 @@ const fs = require('fs');
 const client = require('https');
 const parser = require('./parser');
 const path = require('path');
+const { time } = require('console');
 const downloader = {};
 require('dotenv').config('../../.env');
 

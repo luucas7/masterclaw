@@ -3,7 +3,6 @@ const fs = require('fs');
 const downloader = require('./downloader');
 const { Card, Query } = require('../mongo/models');
 const { create } = require('../crud');
-const { parser } = require('./parser');
 const string = require('./string');
 const path = require('path');
 
@@ -22,9 +21,8 @@ manager.alreadyInStorage = async (name) => {
     return Card.exists({ name: name });
 }
 
-manager.alreadySearched = async (search) => {
+manager.alreadySearched = async (search, filters) => {
     let result = [];
-    const filters = string.getNGrams(search, 3);
     console.log(search, filters);
     result = await Query.find({ query: { $in: filters } });
     result = result.map((item) => item.query);
@@ -40,37 +38,38 @@ manager.saveCard = async (card) => {
 }
 
 manager.fetchCards = async (fname) => {
-    downloader.fetchCards(fname,  '../../public/cards');
+    downloader.fetchCards(fname,  path.join(__dirname, '../../public/cards'));
 }
 
 manager.getSavedCards = async (regex) => {
-    console.log('getSavedCards', regex);
+    console.log('getSavedCards(', regex, ')');
     const result = {};
-    result.data = await Card.find({ name: regex });
+    result.data = await Card.find({ name: regex });;
 
+    console.log(result.data);
 
     return result;
 }
 
 
-manager.getCardInfo = async (name) => {
+manager.getCardsInfo = async (name) => {
 
     if (name.length < 3) return { status: 'error', message: 'Name is too short' }
 
-    const result = {};
+    let result = {};
 
-    const cache = await manager.alreadySearched(name);
+    const ngrams = string.getNGrams(name, 3);
+    const cache = await manager.alreadySearched(name, ngrams);
 
     if (cache.length > 0) {
         // We already stored the card
         console.log(cache); 
 
         const regex = new RegExp(cache[0], 'i');
-
         result = await manager.getSavedCards(regex);
+
     } else {
-        const fname = string.formatName(name);
-        manager.fetchCards(fname);
+        manager.fetchCards(name);
 
     }
 }

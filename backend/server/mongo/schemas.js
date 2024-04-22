@@ -123,10 +123,6 @@ const cardSchema = mongoose.Schema({
             }
         }
     },
-    image_url: {
-        type: String,
-        required: true,
-    },
     });
 
 const querySchema = mongoose.Schema({
