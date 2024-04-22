@@ -13,4 +13,6 @@ app.post('/auth/register', auth.auth_register);
 
 app.post('/cards/add', cards.cards_add);
 
-app.listen(process.env.SERVER_PORT, () => {});
+app.listen(process.env.SERVER_PORT, () => { 
+    console.log(`Server is running on port ${process.env.SERVER_PORT}`);
+});

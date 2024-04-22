@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 
-app.use(express.static(__dirname + '/public'));
+const dir = path.join(__dirname, '../../public');
+app.use(express.static(dir));
 
 module.exports = app;
