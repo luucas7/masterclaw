@@ -1,75 +1,79 @@
-
-const fs = require('fs');
-const downloader = require('./downloader');
-const { Card, Query } = require('../mongo/models');
-const { create } = require('../crud');
-const string = require('./string');
 const path = require('path');
+require('dotenv').config('../../.env');
 
+const formatter = require('./formatter');
+const fetcher = require('./fetcher');
+const sanitizor = require('./sanitizor');
+
+const { read, create } = require('../crud');
+const { Card, Query } = require('../mongo/models');
 
 const manager = {};
- 
-manager.checkPathToFile = (path) => {
-    return fs.existsSync(path);
+
+manager.fetchFromApi = async (input, url) => {
+    return fetcher.getCards(url, `?fname=${input}`)
 }
 
-manager.downloadImage = async (url, filepath) => {
-    return downloader.downloadImage(url, filepath);
+manager.cacheCards = async (data, query) => {
+    create.createDocument({query: query}, Query);
+    create.createDocuments(data, Card);
 }
 
-manager.alreadyInStorage = async (name) => {
-    return Card.exists({ name: name });
+manager.getCachedData = async (input) => {
+    return await read.readDocuments({ name: { $regex: input, $options: 'i' } }, Card, { _id: 0, __v: 0});
 }
 
-manager.alreadySearched = async (search) => {
-    let result = await Query.find({ query: search }, { query: 1, _id: 0 });
-    result = result.map((item) => item.query);
-    return result;
+manager.getQueries = async (input) => {
+    return await read.readDocuments({ query: input }, Query, { _id: 0, __v: 0});
 }
 
-manager.fetchCards = async (fname) => {
-    return downloader.fetchCards(fname,  path.join(__dirname, '../../public/cards'));
-}
+/**
+ * 
+ * @param {String} input - The card name to search for
+ * @returns {Object} - The result of the operation
+ * 
+ * @description - This function is the main controller for the manager module. It sanitizes the input, checks if the data is cached, and fetches the data from the API if it isn't.
+ * 
+ * @example
+ * manager.controller('skilled dark magicia');
+ * // Output: { status: 'success', message: 'Data fetched', data: [ { passcode: 43973174, name: 'Skilled Dark Magician', archetype: 'Dark Magician', image_url: 'https://storage.googleapis.com/ygoprodeck.com/pics/43973174.jpg' } ] }
+ */
+manager.controller = async (input) => {
 
-manager.getSavedCards = async (regex) => {
-    console.log('getSavedCards(', regex, ')');
-    const result = {};
-    result.data = await Card.find({ name: regex });;
+    let initialInput;
+    try {
+        initialInput = sanitizor.sanitizeCardName(input)
+        input = initialInput.toLowerCase();
+    } catch (error) { return { status: 'error', message: error.message } }
 
-    console.log(result.data);
-
-    return result;
-}
-
-manager.registerQuery = async (query, cards) => {
-    create.createDocument({ query: query }, Query);
-    cards.forEach((card) => {
-        create.createDocument(card, Card);
-    });
-}
+    console.log(`Input : ${input}`);
+    const isCached = (await manager.getQueries(input)).length > 0;
 
 
-manager.getCardsInfo = async (name) => {
+    console.log(`isCached : ${isCached}`);
+    if (isCached){
+        let data = await manager.getCachedData(input);
+        console.log('Cached data : ', data);
+        data = await formatter.addImageUrl(data, process.env.SERVER_HOST, '/cards/');
 
-    if (name.length < 3) return { status: 'error', message: 'Name is too short' }
-    name = name.toLowerCase();
+        return { status: 'success', message: 'Data fetched', data: data };
 
-    let result = {};
 
-    const cache = await manager.alreadySearched(name);
-
-    console.log('cache', cache); 
-
-    if (cache.length > 0) {
-        // We already stored the card
-        const regex = new RegExp(cache[0], 'i');
-        result = await manager.getSavedCards(regex);
     } else {
-        const result = await manager.fetchCards(name);
-        const cards = result.data;
-        console.log('cards', cards);
-        manager.registerQuery(name, cards);
+        try {
+            const result = await manager.fetchFromApi(input, process.env.API_URL);
+    
+            let data = await formatter.toNecessary(result.data);
+            console.log('Data : ', data);
+
+            fetcher.downloadCards(data, path.join(__dirname, '../../public/cards'));
+
+            await manager.cacheCards(data, initialInput);
+
+        } catch (error) { return { status: 'error', message: error.message } }
+
     }
+    
 }
 
 

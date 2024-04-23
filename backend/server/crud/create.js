@@ -14,5 +14,13 @@ const createDocument = async (document, model) => {
     }
 };
 
+const createDocuments = async (documents, model) => {
+    try {
+        model.insertMany(documents);
+    } catch (err) {
+        console.error(err);
+    }
+}
 
-module.exports = { createDocument };
+
+module.exports = { createDocument, createDocuments };
