@@ -7,7 +7,7 @@ const test = async () => {
 
     //await downloader.downloadImage('https://images.ygoprodeck.com/images/cards_small/1861630.jpg', path.join(__dirname, 'public/cards/salut.jpg'));
 
-    await manager.getCardsInfo('skilled dark magician');
+    await manager.getCardsInfo('skilled dark magicia');
 }
 
 

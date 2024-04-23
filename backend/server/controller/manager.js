@@ -21,24 +21,14 @@ manager.alreadyInStorage = async (name) => {
     return Card.exists({ name: name });
 }
 
-manager.alreadySearched = async (search, filters) => {
-    let result = [];
-    console.log(search, filters);
-    result = await Query.find({ query: { $in: filters } });
+manager.alreadySearched = async (search) => {
+    let result = await Query.find({ query: search }, { query: 1, _id: 0 });
     result = result.map((item) => item.query);
     return result;
 }
 
-manager.saveCard = async (card) => {
-    create.createDocument(card, Card);
-
-    downloader.putInStorage(card.name);
-
-
-}
-
 manager.fetchCards = async (fname) => {
-    downloader.fetchCards(fname,  path.join(__dirname, '../../public/cards'));
+    return downloader.fetchCards(fname,  path.join(__dirname, '../../public/cards'));
 }
 
 manager.getSavedCards = async (regex) => {
@@ -51,26 +41,34 @@ manager.getSavedCards = async (regex) => {
     return result;
 }
 
+manager.registerQuery = async (query, cards) => {
+    create.createDocument({ query: query }, Query);
+    cards.forEach((card) => {
+        create.createDocument(card, Card);
+    });
+}
+
 
 manager.getCardsInfo = async (name) => {
 
     if (name.length < 3) return { status: 'error', message: 'Name is too short' }
+    name = name.toLowerCase();
 
     let result = {};
 
-    const ngrams = string.getNGrams(name, 3);
-    const cache = await manager.alreadySearched(name, ngrams);
+    const cache = await manager.alreadySearched(name);
+
+    console.log('cache', cache); 
 
     if (cache.length > 0) {
         // We already stored the card
-        console.log(cache); 
-
         const regex = new RegExp(cache[0], 'i');
         result = await manager.getSavedCards(regex);
-
     } else {
-        manager.fetchCards(name);
-
+        const result = await manager.fetchCards(name);
+        const cards = result.data;
+        console.log('cards', cards);
+        manager.registerQuery(name, cards);
     }
 }
 

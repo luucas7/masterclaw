@@ -76,7 +76,6 @@ downloader.fetchCards = async (fname, folder) => {
         ]
     */
     data = await parser.takeNecessaryData(response);
-    console.log('data', data);
 
     return downloader.putInStorage(data, folder);
 

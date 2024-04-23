@@ -29,7 +29,7 @@ string.getNGramsToLen = (text, n) =>
     for (let i = n; i <= text.length; i++) {
         ngrams.push(string.getNGrams(text, i));
     }
-    return ngrams;
+    return ngrams.flatMap((item) => item);
 }
 
 module.exports = string;
