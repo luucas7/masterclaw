@@ -4,6 +4,12 @@ const path = require('path');
 const fetcher = {};
 require('dotenv').config('../../.env');
 
+/**
+ * @param {string} url - The url of the image to download
+ * @param {string} filepath - The path to save the image
+ * @returns {Promise<string>} - The result of the operation
+ * @description - Downloads an image from a url and saves it to a file
+ */
 fetcher.downloadImage = async (url, filepath) => {
     return new Promise((resolve, reject) => {
         // Create directory if it doesn't exist
@@ -25,12 +31,16 @@ fetcher.downloadImage = async (url, filepath) => {
     });
 }
 
+/**
+ * @param {Array<Object<>>} cards 
+ * @param {path} folder 
+ * @returns {Promise<Object>} - The result of the operation
+ */
 fetcher.downloadCards = async (cards, folder) => {
 
     const result = cards.map(card => {
-
         const filepath = path.join(folder, `${card.passcode}.jpg`);
-
+        
         fetcher.downloadImage(card.image_url, filepath)
             .then(() => console.log(`Downloaded '${card.name}'`) )
             .catch((err) => console.error(`Failed to download '${card.name}': ${err}`) );
@@ -39,7 +49,13 @@ fetcher.downloadCards = async (cards, folder) => {
     return { status: 'success', message: 'Downloaded images', data: result};
 }
 
-fetcher.getCards = async (url, query) => {
+/**
+ * 
+ * @param {string} url 
+ * @param {string} query 
+ * @returns {Promise<Object>} - Fetched data from the API
+ */
+fetcher.fetch = async (url, query) => {
     console.log(`Fetching : ${url}${query}`);
         return new Promise((resolve, reject) => {
             client.get(`${url}${query}`, (res) => {

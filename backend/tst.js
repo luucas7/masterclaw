@@ -7,7 +7,7 @@ const test = async () => {
 
     //await fetcher.downloadImage('https://images.ygoprodeck.com/images/cards_small/1861630.jpg', path.join(__dirname, 'public/cards/salut.jpg'));
 
-    const result = await manager.controller('skilled dark magicia');
+    const result = await manager.controller('skilled ');
     console.log('Final result : ', result);
 }
 

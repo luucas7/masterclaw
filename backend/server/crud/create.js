@@ -9,17 +9,13 @@ const { Model } = require("mongoose");
 const createDocument = async (document, model) => {
     try {
         model.create(document);
-        } catch (err) {
+    } catch (err) {
         console.error(err);
     }
 };
 
 const createDocuments = async (documents, model) => {
-    try {
-        model.insertMany(documents);
-    } catch (err) {
-        console.error(err);
-    }
+    model.insertMany(documents);
 }
 
 
