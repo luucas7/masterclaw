@@ -19,7 +19,6 @@
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
-    "morgan": "^1.10.0",
     "mysql2": "^3.9.7",
     "n-gram": "^2.0.2",
     "nodemon": "^3.1.0",
