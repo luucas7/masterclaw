@@ -46,7 +46,6 @@ const userSchema = mongoose.Schema({
     }
 });
 
-
 const deckSchema = mongoose.Schema({
     main_deck: {
         type: Array,
@@ -141,14 +140,11 @@ const querySchema = mongoose.Schema({
     }
 });
 
-
-
 module.exports = {
     schemas: {
         userSchema,
         deckSchema,
         cardSchema,
         querySchema
-
     }
 };

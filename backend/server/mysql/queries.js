@@ -1,8 +1,5 @@
 const pool = require('./client');
 
-const reader = {};
-
-
 /**
  * 
  * @param {string} query 
@@ -34,13 +31,5 @@ const storeQuery = async (query) => {
     const [rows] = await pool.query("INSERT INTO query (id, query) VALUES (NULL,?) RETURNING id", [query]);
     return rows ? { status: 'success', message: "Query stored" } : { status: 'error', message: `Failed to store query ${query}` };
 }
-
-
-
-
-
-
-
-
 
 module.exports = { getQuerySubstring, storeQuery };

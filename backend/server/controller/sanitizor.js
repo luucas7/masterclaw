@@ -10,5 +10,4 @@ sanitizor.sanitizeCardName = (input) => {
     return validator.escape(input);
 }
 
-
 module.exports = sanitizor;

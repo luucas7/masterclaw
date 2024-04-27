@@ -3,7 +3,6 @@ const { create, drop, read, update } = require('../crud');
 const { generateToken, generateUUID } = require('../misc/jwt');
 const { User, Deck } = require('../mongo/models');
 
-
 const auth_login = async (req, res) => {
     const { username, password } = req.body;
     console.log('/auth/login', username, password);
@@ -22,8 +21,6 @@ const auth_login = async (req, res) => {
             res.send({ status: 'error', message: 'An error occured, Code : E101' });
             break;
         case 1:
-
-            
             const { email, uuid } = users[0];
 
             const jwt = {
@@ -36,7 +33,6 @@ const auth_login = async (req, res) => {
                 email,
                 uuid
             }
-            
             res.send({ status: 'success', message: 'Succesfully connected', jwt: jwt, user: user});
             break;
 
@@ -44,7 +40,6 @@ const auth_login = async (req, res) => {
             res.send({ status: 'error', message: 'Multiple users found, Code : E102' });
             break;
     }
-
 }
 
 const auth_register = async (req, res) => {

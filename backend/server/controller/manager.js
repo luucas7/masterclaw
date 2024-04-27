@@ -81,11 +81,8 @@ manager.controller = async (input) => {
             await manager.cacheCards(data, initialInput);
 
         } catch (error) { return { status: 'error', message: error.message } }
-
     }
-
 }
-
 
 module.exports = manager;
 
