@@ -8,21 +8,22 @@ import Cards from '../pages/cards/Cards';
 import AddCard from '../pages/cards/AddCard';
 import Header from '../components/Header'
 import GlobalSnackbar from '../components/GlobalSnackbar'
-
+import Decks from '../pages/cards/Decks'
 
 const AppRouter = () => {
 
-    
+
     return (
         <BrowserRouter>
             <Header />
             <GlobalSnackbar />
-            <div className='page-body flexbox'>
 
             <Routes>
-                
+
                 <Route path='/' element={<Home />} />
                 <Route path='/cards' element={<Cards />} />
+
+                <Route path='decks' element={<Decks />} />
 
                 <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
 
@@ -31,7 +32,6 @@ const AppRouter = () => {
                 <Route path='/logout' element={<Logout />} />
 
             </Routes>
-            </div>
         </BrowserRouter>
     )
 }

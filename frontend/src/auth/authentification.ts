@@ -25,7 +25,7 @@ export const authentification = async ({username, password, email, path, navigat
     console.log(finalResult);
     
         if (!finalResult.result) {            
-            showOutput({ message: 'An error occured, Code : E106', type: 'error' });
+            showOutput({ message: 'An error occured, please change and re-try', type: 'error' });
             gotError(true);
             return;
         }

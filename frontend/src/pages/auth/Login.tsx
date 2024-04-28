@@ -38,77 +38,79 @@ const Login = () => {
 
   return (
     <>
-      <Grid container display={"flex"} className="flexbox justify-center">
-        <Grid item lg={4} md={5} sm={6} xs={7}>
-          <Box className="luucky-form-container">
-            <p className="luucky-title">Welcome back</p>
-            <Box
-              className="luucky-form"
-              component={"form"}
-              autoComplete="on"
-              onSubmit={onSubmit}
-              onChange={() => {
-                error && setError(false);
-              }}
-            >
-              <div className="luucky-input-group">
-                <TextField
-                  id="name"
-                  label="Name"
-                  variant="outlined"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
-                  required
-                  type="text"
-                  margin="normal"
-                  fullWidth
-                  autoFocus
-                  error={error}
-                />
+      <div className='page-body flexbox'>
+        <Grid container className="flexbox justify-center">
+          <Grid item lg={4} md={5} sm={6} xs={7}>
+            <Box className="luucky-form-container">
+              <p className="luucky-title">Welcome back</p>
+              <Box
+                className="luucky-form"
+                component={"form"}
+                autoComplete="on"
+                onSubmit={onSubmit}
+                onChange={() => {
+                  error && setError(false);
+                }}
+              >
+                <div className="luucky-input-group">
+                  <TextField
+                    id="name"
+                    label="Name"
+                    variant="outlined"
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                    required
+                    type="text"
+                    margin="normal"
+                    fullWidth
+                    autoFocus
+                    error={error}
+                  />
+                </div>
+
+                <div className="luucky-input-group">
+                  <TextField
+                    id="password"
+                    label="Password"
+                    variant="outlined"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    required
+                    type="password"
+                    margin="normal"
+                    fullWidth
+                    error={error}
+                    helperText={error && "Try again with valid credentials"}
+                  />
+                </div>
+
+                <div className="flexbox justify-center">
+                  <input
+                    type="submit"
+                    value="Login"
+                    id="submit"
+                    className="luucky-submit"
+                    disabled={submitting}
+                  />
+                </div>
+              </Box>
+
+              <div className="luucky-social-message">
+                <div className="luucky-line"></div>
               </div>
 
-              <div className="luucky-input-group">
-                <TextField
-                  id="password"
-                  label="Password"
-                  variant="outlined"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  required
-                  type="password"
-                  margin="normal"
-                  fullWidth
-                  error={error}
-                  helperText={error && "Try again with valid credentials"}
-                />
-              </div>
-
-              <div className="flexbox justify-center">
-                <input
-                  type="submit"
-                  value="Login"
-                  id="submit"
-                  className="luucky-submit"
-                  disabled={submitting}
-                />
-              </div>
+              <p className="luucky-signup">
+                No account yet ?&nbsp;
+                <Link to="/register">Register</Link>
+              </p>
             </Box>
-
-            <div className="luucky-social-message">
-              <div className="luucky-line"></div>
-            </div>
-
-            <p className="luucky-signup">
-              No account yet ?&nbsp;
-              <Link to="/register">Register</Link>
-            </p>
-          </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </>
   );
 };
