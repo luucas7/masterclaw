@@ -41,7 +41,7 @@ const Login = () => {
       <Grid container display={"flex"} className="flexbox justify-center">
         <Grid item lg={4} md={5} sm={6} xs={7}>
           <Box className="luucky-form-container">
-            <p className="luucky-title">Login</p>
+            <p className="luucky-title">Welcome back</p>
             <Box
               className="luucky-form"
               component={"form"}
@@ -87,13 +87,15 @@ const Login = () => {
                 />
               </div>
 
-              <input
-                type="submit"
-                value="Login"
-                id="submit"
-                className="luucky-submit"
-                disabled={submitting}
-              />
+              <div className="flexbox justify-center">
+                <input
+                  type="submit"
+                  value="Login"
+                  id="submit"
+                  className="luucky-submit"
+                  disabled={submitting}
+                />
+              </div>
             </Box>
 
             <div className="luucky-social-message">

@@ -75,7 +75,7 @@ const Register = () => {
       <Grid container display={"flex"} className="flexbox justify-center">
         <Grid item lg={4} md={5} sm={6} xs={7}>
           <Box className="luucky-form-container">
-            <p className="luucky-title">Register</p>
+            <p className="luucky-title">Create an account</p>
             <Box
               className="luucky-form"
               component={"form"}
@@ -87,7 +87,7 @@ const Register = () => {
             >
               <div className="luucky-input-group">
                 <TextField
-                  id="email"
+                  id="outlined-basic"
                   label="Email"
                   variant="outlined"
                   value={state.email}
@@ -137,13 +137,15 @@ const Register = () => {
                 />
               </div>
 
-              <input
-                type="submit"
-                value="Register"
-                id="submit"
-                className={"luucky-submit"}
-                disabled={submitting}
-              />
+              <div className="flexbox justify-center">
+                <input
+                  type="submit"
+                  value="Register"
+                  id="submit"
+                  className={"luucky-submit"}
+                  disabled={submitting}
+                />
+              </div>
             </Box>
 
             <div className="luucky-social-message">

@@ -1,6 +1,5 @@
 const validator = require('validator');
 const mongoose = require('./client');
-const { validate } = require('uuid');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -8,6 +7,7 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
         validate(value) {
+            
             if (!validator.isAlphanumeric(value)) {
                 throw new Error('Username must only contain letters and numbers');
             }
@@ -17,6 +17,7 @@ const userSchema = mongoose.Schema({
         }
     },
     email: {
+        unique: true,
         type: String,
         required: true,
         validate(value) {
@@ -122,29 +123,11 @@ const cardSchema = mongoose.Schema({
     },
     });
 
-const querySchema = mongoose.Schema({
-    query: {
-        type: String,
-        required: true,
-        validate(value) {
-            if (!validator.isLength(value, { min: 3 })) {
-                throw new Error('Query must be at least 3 characters long');
-            }
-
-        }
-    },
-
-    creation_date: {
-        type: Date,
-        default: Date.now,
-    }
-});
 
 module.exports = {
     schemas: {
         userSchema,
         deckSchema,
         cardSchema,
-        querySchema
     }
 };

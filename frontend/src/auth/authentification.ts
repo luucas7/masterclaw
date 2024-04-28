@@ -63,7 +63,8 @@ export const authentification = async ({username, password, email, path, navigat
             }
 
         } catch (err) {
-            showOutput({ message: "An error occured, Code : E110", type: 'error' });
+            console.log(err);
+            showOutput({ message: "An error occured, Code : E110" + err, type: 'error' });
             gotError(true);
         }
 }
