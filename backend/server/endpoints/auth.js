@@ -36,7 +36,7 @@ const login = async (username, password) => {
 }
 
 const register = async (username, email, password) => {
-    const users = await read.readDocuments({ $or: [{ username: username, email: email }] }, User, { _id: 0, __v: 0 });
+    const users = await read.readDocuments({ $or: [{ username: username }, { email: email }] }, User, { username: 1, email: 1, _id: 0, __v: 0});
     console.log(users);
 
     if (users === undefined) {

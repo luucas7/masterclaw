@@ -10,7 +10,7 @@ const { Model } = require("mongoose");
  */
 const readDocuments = async (query, model, projection) => {
     try {
-        return await model.find(query, projection);
+        return await model.find(query);
     } catch (err) {
         console.error(err);
     }
