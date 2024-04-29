@@ -1,31 +1,28 @@
-import { Box, Grid } from '@mui/material'
-import '../../style/compiled/cards.css'
-import DeckListing from './DeckListing'
+import { Box, Grid } from "@mui/material";
+import "../../style/compiled/cards.css";
+import DeckListing from "./DeckListing";
 
 const Decks = () => {
-
-    return (
-        <>
-            <Grid container className='page-body'>
-
-                <Grid container item md={12}>
-                    <Grid item md={6}>
-                        <Box className='cards-container '>
-                            <DeckListing/>
-                        </Box>
-                    </Grid>
-                </Grid>
-
-                <Grid item md={6} className='flexbox flex-row justify-center'>
-                    <Box className='cards-container'>
-                    </Box>
-                </Grid>
-                
-
+  return (
+    <>
+      <div className="page-body">
+        <Grid container>
+          <Grid item md={6}>
+            <Grid container className="flexbox justify-center">
+              <Grid item md={8}>
+                <Box className="cards-container ">
+                  <DeckListing />
+                </Box>
+              </Grid>
             </Grid>
-        </>
-    )
-}   
+          </Grid>
+          <Grid item md={6}>
+            <Box className="cards-container"></Box>
+          </Grid>
+        </Grid>
+      </div>
+    </>
+  );
+};
 
-
-export default Decks
+export default Decks;
