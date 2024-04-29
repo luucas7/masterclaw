@@ -1,19 +1,17 @@
 @import ./variables.sass
 
-$form-background-color: #1c1e22
-
 
 .luucky-form-container
     border-radius: 1rem
-    background-color: $form-background-color
     padding: 2rem
     color: $text-color
 
 .luucky-title
     text-align: center
-    font-size: 1.75rem
+    font-size: 2.5rem
     line-height: 2rem
     font-weight: 700
+    margin-bottom: 2.5rem
 
 .luucky-input-group
     margin-top: 0.25rem
@@ -30,8 +28,8 @@ $form-background-color: #1c1e22
         border-radius: 0.4rem
         outline: 0
         background-color: var(--inputtext)
-        padding: 0.75rem 1rem
         color: rgba(243, 244, 246, 1)
+        
 
         &:focus, &:hover, &:active, &:visited, &:-webkit-autofill
             background-color: &$primary-color
@@ -39,7 +37,6 @@ $form-background-color: #1c1e22
     
 
 .luucky-signup
-    font-size: 0.9rem
 
     a
         color: rgba(243, 244, 246, 1)
@@ -51,7 +48,7 @@ $form-background-color: #1c1e22
 
 .luucky-submit
     display: block
-    width: 100%
+    width: 80%
     background-color: $text-hover
     padding: 0.75rem
     text-align: center
@@ -61,7 +58,7 @@ $form-background-color: #1c1e22
     font-weight: 600
     margin-top: 2.85rem
     box-shadow: 0 3px 0 0 #1d3c6a
-    font-size: 1.05rem
+    font-size: 1.25rem
 
     &:hover
         cursor: pointer
@@ -69,9 +66,8 @@ $form-background-color: #1c1e22
 .luucky-signup
     padding-top: 1rem
     text-align: center
-    font-size: 0.75rem
+    font-size: 0.90rem
     line-height: 1rem
-    color: rgba(156, 163, 175, 1)
 
 .two-images-choice
     label *
@@ -108,3 +104,6 @@ $form-background-color: #1c1e22
 .waiting-input, .luucky-submit[disabled]
     opacity: 0.3
     transition: 0.3s
+
+fieldset
+    // Override default MUI styling

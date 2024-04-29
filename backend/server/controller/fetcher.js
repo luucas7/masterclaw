@@ -74,5 +74,4 @@ fetcher.fetch = async (url, query) => {
         });
 }
 
-
 module.exports = fetcher;

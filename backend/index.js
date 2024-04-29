@@ -1,11 +1,8 @@
 const app = require('./server/misc/express');
-require('dotenv').config('.env');
+const path = require('path');
+require('dotenv').config();
 
 const {auth, cards} = require('./server/endpoints');
-
-
-
-
 
 app.post('/auth/login', auth.auth_login)
 

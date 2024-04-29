@@ -15,7 +15,6 @@ mongoose.connection.on('disconnected', () => {
   console.log(new Date().toLocaleString(process.env.LOCALE), '- Disconnected from MongoDB');
 });
 
-
 mongoose.connect(process.env.MONGO_URI);
 
 module.exports = mongoose;

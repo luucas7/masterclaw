@@ -10,7 +10,6 @@ const Header = () => {
 
     const isAuthenticated = useIsAuthenticated();
 
-
     useEffect(() => {
         console.log(user);
         console.log(isAuthenticated);

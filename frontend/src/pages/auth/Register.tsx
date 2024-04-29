@@ -72,91 +72,96 @@ const Register = () => {
 
   return (
     <>
-      <Grid container display={"flex"} className="flexbox justify-center">
-        <Grid item lg={4} md={5} sm={6} xs={7}>
-          <Box className="luucky-form-container">
-            <p className="luucky-title">Register</p>
-            <Box
-              className="luucky-form"
-              component={"form"}
-              autoComplete="on"
-              onSubmit={onSubmit}
-              onChange={() => {
-                error && setError(false);
-              }}
-            >
-              <div className="luucky-input-group">
-                <TextField
-                  id="email"
-                  label="Email"
-                  variant="outlined"
-                  value={state.email}
-                  onChange={(e) => {
-                    onDispatch("email", e.target.value);
-                  }}
-                  required
-                  type="email"
-                  margin="normal"
-                  fullWidth
-                  error={error}
-                />
+      <div className='page-body flexbox'>
+        <Grid container display={"flex"} className="flexbox justify-center">
+          <Grid item lg={4} md={5} sm={6} xs={7}>
+            <Box className="luucky-form-container">
+              <p className="luucky-title">Create an account</p>
+              <Box
+                className="luucky-form"
+                component={"form"}
+                autoComplete="on"
+                onSubmit={onSubmit}
+                onChange={() => {
+                  error && setError(false);
+                }}
+              >
+                <div className="luucky-input-group">
+                  <TextField
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
+                    value={state.email}
+                    autoFocus
+                    onChange={(e) => {
+                      onDispatch("email", e.target.value);
+                    }}
+                    required
+                    type="email"
+                    margin="normal"
+                    fullWidth
+                    error={error}
+                  
+                  />
+                </div>
+
+                <div className="luucky-input-group">
+                  <TextField
+                    id="name"
+                    label="Name"
+                    variant="outlined"
+                    value={state.username}
+                    onChange={(e) => {
+                      onDispatch("username", e.target.value);
+                    }}
+                    required
+                    type="text"
+                    margin="normal"
+                    fullWidth
+                    error={error}
+                  />
+                </div>
+
+                <div className="luucky-input-group">
+                  <TextField
+                    id="password"
+                    label="Password"
+                    variant="outlined"
+                    value={state.password}
+                    onChange={(e) => {
+                      onDispatch("password", e.target.value);
+                    }}
+                    required
+                    type="password"
+                    margin="normal"
+                    fullWidth
+                    error={error}
+                  />
+                </div>
+
+                <div className="flexbox justify-center">
+                  <input
+                    type="submit"
+                    value="Register"
+                    id="submit"
+                    className={"luucky-submit"}
+                    disabled={submitting}
+                  />
+                </div>
+              </Box>
+
+              <div className="luucky-social-message">
+                <div className="luucky-line"></div>
               </div>
 
-              <div className="luucky-input-group">
-                <TextField
-                  id="name"
-                  label="Name"
-                  variant="outlined"
-                  value={state.username}
-                  onChange={(e) => {
-                    onDispatch("username", e.target.value);
-                  }}
-                  required
-                  type="text"
-                  margin="normal"
-                  fullWidth
-                  autoFocus
-                  error={error}
-                />
-              </div>
-
-              <div className="luucky-input-group">
-                <TextField
-                  id="password"
-                  label="Password"
-                  variant="outlined"
-                  value={state.password}
-                  onChange={(e) => {
-                    onDispatch("password", e.target.value);
-                  }}
-                  required
-                  type="password"
-                  margin="normal"
-                  fullWidth
-                  error={error}
-                />
-              </div>
-
-              <input
-                type="submit"
-                value="Register"
-                id="submit"
-                className={"luucky-submit"}
-                disabled={submitting}
-              />
+              <p className="luucky-signup">
+                You have an account ?&nbsp;
+                <Link to="/login">Login</Link>
+              </p>
             </Box>
-
-            <div className="luucky-social-message">
-              <div className="luucky-line"></div>
-            </div>
-
-            <p className="luucky-signup">
-              You have an account ?&nbsp;
-              <Link to="/login">Login</Link>
-            </p>
-          </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </>
   );
 };

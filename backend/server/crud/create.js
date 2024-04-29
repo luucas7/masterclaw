@@ -18,5 +18,4 @@ const createDocuments = async (documents, model) => {
     model.insertMany(documents);
 }
 
-
 module.exports = { createDocument, createDocuments };
