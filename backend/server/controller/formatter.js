@@ -38,7 +38,7 @@ formatter.addImageUrl = async (data, url, imageFolder) => {
 /**
  * 
  * @param {Array<Object>} data 
- * @param {string} filter 
+ * @param {string} filter ²
  * @returns {Promise<Set<string>>} - The result of the operation
  * @description - Returns a set with all the different values of the filter field
  * @example
