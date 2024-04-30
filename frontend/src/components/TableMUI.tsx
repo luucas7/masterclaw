@@ -109,7 +109,7 @@ const TableMUI = ({rows} :{
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className='secondary-color-container'>
       <Table aria-label="custom pagination table">
         <TableBody>
           {(rowsPerPage > 0
@@ -127,6 +127,7 @@ const TableMUI = ({rows} :{
         <TableFooter>
           <TableRow>
             <TablePagination
+              style={{'borderBottom': 'none'}}
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
               count={rows.length}

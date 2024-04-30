@@ -9,7 +9,7 @@ const Decks = () => {
         <Grid container>
           <Grid item md={6}>
             <Grid container className="flexbox justify-center">
-              <Grid item md={8}>
+              <Grid item md={9}>
                 <Box className="cards-container ">
                   <DeckListing />
                 </Box>
