@@ -1,5 +1,7 @@
 const validator = require('validator');
 const mongoose = require('./client');
+const {generateUUID} = require('../misc/jwt');
+const { uuid } = require('../controller/sanitize');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -34,6 +36,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        default: generateUUID(),
         validate(value) {
             if (!validator.isUUID(value)) {
                 throw new Error('UUID is invalid');
@@ -52,14 +55,15 @@ const deckSchema = mongoose.Schema({
         type: Array,
         required: true,
         validate(value) {
-            if (value.length < 40) {
-                throw new Error('Main deck must contain at least 40 cards');
+            // TODO DEBUG VALUE, REPLACE 3 BY 40
+            if (value.length < 3 || value.length > 60) {
+                throw new Error('Main deck must contain at least 40 cards and at most 60 cards');
             }
         }
     },
     extra_deck: {
         type: Array,
-        required: true,
+        required: false,
         validate(value) {
             if (value.length > 15) {
                 throw new Error('Extra deck must contain at most 15 cards');
@@ -70,7 +74,6 @@ const deckSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
         validate(value) {
             if (!validator.isAlphanumeric(value)) {
                 throw new Error('Deck name must only contain letters and numbers');
@@ -85,7 +88,18 @@ const deckSchema = mongoose.Schema({
         required: true,
         validate(value) {
             if (!validator.isLength(value, { max: 100 })) {
-                throw new Error('Deck description must be at least 3 characters long and at most 100 characters long');
+                throw new Error('Deck description must be at most 100 characters long');
+            }
+        }
+    },
+    uuid: {
+        type: String,
+        required: true,
+        unique: true,
+        default: generateUUID(),
+        validate(value) {
+            if (!validator.isUUID(value)) {
+                throw new Error('UUID is invalid');
             }
         }
     },

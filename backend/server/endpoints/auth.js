@@ -17,24 +17,22 @@ const login = async (username, password) => {
         case 0:
             return { status: 'error', message: 'An error occured, Code : E101' };
         case 1:
-            const { email, uuid } = users[0];
+            const { e } = users[0];
 
             const jwt = {
-                token: generateToken({ username, email, uuid }),
+                token: generateToken({ username, e }),
                 tokenType: 'Bearer',
                 expiresIn: 36000
             }
             const user = {
                 username,
-                email,
-                uuid
+                email
             }
             return { status: 'success', message: 'Succesfully connected', jwt: jwt, user: user };
         default:
             return { status: 'error', message: 'Multiple users found, Code : E102' };
     }
 }
-
 const register = async (username, email, password) => {
     const users = await read.readDocuments({ $or: [{ username: username }, { email: email }] }, User, { username: 1, email: 1, _id: 0, __v: 0});
     console.log(users);
@@ -45,18 +43,16 @@ const register = async (username, email, password) => {
 
     switch (users.length) {
         case 0:
-            const uuid = generateUUID();
             const jwt = {
-                token: generateToken({ username, email, uuid }),
+                token: generateToken({ username, email }),
                 tokenType: 'Bearer',
                 expiresIn: 36000
             }
             const user = {
                 username,
-                email,
-                uuid
+                email
             }
-            await create.createDocument({ username: username, email: email, password: password, uuid: uuid }, User);
+            await create.createDocument({ username: username, email: email, password: password }, User);
             return { status: 'success', message: 'Account created', jwt: jwt, user: user };
 
         case 1:

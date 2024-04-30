@@ -53,4 +53,8 @@ formatter.getUniqueValues = async (data, filter) => {
     return values;
 }
 
+formatter.cardNameToObjectId = async (name) => {
+    
+}
+
 module.exports = formatter;

@@ -3,7 +3,7 @@ require('dotenv').config('../../.env');
 
 const formatter = require('./formatter');
 const fetcher = require('./fetcher');
-const sanitizor = require('./sanitizor');
+const sanitize = require('./sanitize');
 const { getQuerySubstring, storeQuery } = require('../mysql/queries');
 
 const { read, create } = require('../crud');
@@ -45,7 +45,7 @@ manager.controller = async (input) => {
     let isCached;
     try {
         // Sanitizing and formatting the input
-        initialInput = sanitizor.sanitizeCardName(input)
+        initialInput = sanitize.cardName(input)
         input = initialInput.toLowerCase();
         console.log(`Input : ${input}`);
         // Checking if any queries which are substrings of the input are already stored
@@ -76,10 +76,8 @@ manager.controller = async (input) => {
             // Downloading the images and putting them in the public folder
             fetcher.downloadCards(data, path.join(__dirname, '../../public/cards'));
 
-
             // Storing the data in the database
             await manager.storeCards(data, initialInput);
-
         } catch (error) { return { status: 'error', message: error.message } }
     }
 }
