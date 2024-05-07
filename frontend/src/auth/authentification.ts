@@ -2,7 +2,7 @@ import { AxiosCustomAuthResponse } from '../ts/axios';
 import { sha256 } from 'js-sha256';
 import { FormInputFormat, FormValidationResult, FormValidator } from '../ts/form';
 import axios from 'axios';
-import { HOST } from '../config';
+import { SERVER_HOST } from '../config';
 import { OutputContent } from '../ts/output';
 
 const FormInputValidation = (values: FormInputFormat): FormValidationResult => {
@@ -33,7 +33,7 @@ export const authentification = async ({username, password, email, path, navigat
         finalResult.values.password = sha256(finalResult.values.password);
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response = (await axios.post<any, AxiosCustomAuthResponse>(`${HOST}/auth/${path}`, finalResult.values)).data;
+            const response = (await axios.post<any, AxiosCustomAuthResponse>(`${SERVER_HOST}/auth/${path}`, finalResult.values)).data;
                 
             console.log(response);
             switch (response.status) {
