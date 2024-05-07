@@ -17,17 +17,14 @@ const login = async (username, password) => {
         case 0:
             return { status: 'error', message: 'An error occured, Code : E101' };
         case 1:
-            const { e } = users[0];
+            const {email} = users[0];
 
             const jwt = {
-                token: generateToken({ username, e }),
+                token: generateToken({ username, email }),
                 tokenType: 'Bearer',
                 expiresIn: 36000
-            }
-            const user = {
-                username,
-                email
-            }
+            };
+            const user = { username, email };
             return { status: 'success', message: 'Succesfully connected', jwt: jwt, user: user };
         default:
             return { status: 'error', message: 'Multiple users found, Code : E102' };
