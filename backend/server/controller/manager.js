@@ -3,7 +3,7 @@ require('dotenv').config('../../.env');
 
 const formatter = require('./formatter');
 const fetcher = require('./fetcher');
-const sanitize = require('./sanitize');
+const sanitize = require('../misc/sanitize');
 const { getQuerySubstring, storeQuery } = require('../mysql/queries');
 
 const { read, create } = require('../crud');

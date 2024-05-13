@@ -1,4 +1,4 @@
-const sanitize = require('../../server/controller/sanitize');
+const sanitize = require('../../server/misc/sanitize');
 
 test('aaa is too short', () => {
     expect(() => sanitize.cardName('aa')).toThrowError('Name is too short');
