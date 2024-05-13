@@ -12,27 +12,21 @@ import Decks from '../pages/cards/Decks'
 
 const AppRouter = () => {
 
-
-    return (
-        <BrowserRouter>
-            <Header />
-            <GlobalSnackbar />
-
-            <Routes>
-
-                <Route path='/' element={<Home />} />
-                <Route path='/cards' element={<Cards />} />
-
-                <Route path='/decks/:name' element={<Decks />} />
-
-                <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
-
-                <Route path='/login' element={<Login />} />
-                <Route path='/register' element={<Register />} />
-                <Route path='/logout' element={<Logout />} />
-
-            </Routes>
-        </BrowserRouter>
-    )
+  return (
+    <BrowserRouter>
+      <Header />
+      <GlobalSnackbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/cards' element={<Cards />} />
+        <Route path='/decks' element={<Decks />} />
+        <Route path='/decks/:name' element={<Decks />} />
+        <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/logout' element={<Logout />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 export default AppRouter

@@ -1,19 +1,34 @@
 import TableMUI from '../../components/TableMUI';
 import { DeckPreview } from '../../ts/cards';
 import useFetch from 'react-fetch-hook';
-import { ENDPOINTS } from '../../config';
+import { ENDPOINTS, SERVER_HOST } from '../../config';
 import { useParams } from 'react-router-dom';
+import { Named } from '../../ts/user';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import { CircularProgress } from '@mui/material';
 
 const DeckListing = () => {
 
-    const { name } = useParams();
+    const { paramName } = useParams();
+    const user = useAuthUser<Named>();
 
-    const { data: decks, isLoading, error} = useFetch<DeckPreview[]>(`${ENDPOINTS.DECKS}/${name}`);
+    const name = paramName ? paramName : user?.name;
+    
+    const { data: decks, isLoading, error} = useFetch<DeckPreview[]>(`${SERVER_HOST}${ENDPOINTS.DECKS}/${name}`);
 
+    console.log(`decks:`,decks);
+    
     return (
-        <div>
+        <>
             {!isLoading && decks && <TableMUI rows={decks}/>}
-        </div>
+            {error && <div>{error.message}</div>}
+            {isLoading && 
+                <>
+                    <CircularProgress />
+                </>
+            }
+
+        </>
     );
 };
 

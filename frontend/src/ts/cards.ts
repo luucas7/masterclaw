@@ -1,5 +1,4 @@
-export interface DeckPreview{
-    id: number;
+export interface DeckPreview {
     name: string;
     description: string;
     image: string;

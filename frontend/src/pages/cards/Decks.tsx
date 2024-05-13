@@ -1,6 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import "../../style/compiled/cards.css";
 import DeckListing from "./DeckListing";
+import AddDeck from "./AddDeck";
 
 const Decks = () => {
   return (
@@ -17,7 +18,7 @@ const Decks = () => {
             </Grid>
           </Grid>
           <Grid item md={6}>
-            <Box className="cards-container"></Box>
+            <AddDeck />
           </Grid>
         </Grid>
       </div>
