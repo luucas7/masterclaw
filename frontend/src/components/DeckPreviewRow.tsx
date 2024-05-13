@@ -1,24 +1,19 @@
 import { Grid, TableRow } from "@mui/material";
 import { DeckPreview } from "../ts/cards";
+import SquaredImage from "./SquaredImage";
+import Text from "./Text";
 
-const TableRowsMUI = ({ deck }: { 
-  deck: DeckPreview
-}) => {
-
+const TableRowsMUI = ({ deck }: { deck: DeckPreview }) => {
   return (
     <>
       <TableRow>
-        <Grid container spacing={2} className="deck-preview">
+        <Grid container padding={0.5}>
           <Grid item md={3}>
-            <div className="image-container">
-            <img src={deck.image} alt={deck.name} />
-            </div>
+            <SquaredImage src={deck.image} alt={deck.name} />
           </Grid>
-          <Grid item md={9}>
-              <p className="deck-name">{deck.name}</p>
-              <p className="deck-description">
-                {deck.description ?? "No description..."}
-              </p>
+          <Grid item md={9} padding={0.75}>
+            <Text content={deck.name} bold color="white" />
+            <Text content={deck.description} color="grey" />
           </Grid>
         </Grid>
       </TableRow>

@@ -23,7 +23,7 @@ const AppRouter = () => {
                 <Route path='/' element={<Home />} />
                 <Route path='/cards' element={<Cards />} />
 
-                <Route path='decks' element={<Decks />} />
+                <Route path='/decks/:name' element={<Decks />} />
 
                 <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
 
