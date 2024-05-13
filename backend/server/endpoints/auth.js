@@ -1,24 +1,24 @@
 
 const { create, drop, read, update } = require('../crud');
 const { generateToken, generateUUID } = require('../misc/jwt');
+const sanitize = require('../misc/sanitize');
 const { User, Deck } = require('../mongo/models');
 
 const login = async (username, password) => {
+    try {
+        username = sanitize.username(username);
+        password = sanitize.password(password);
+    } catch (error) { return { status: 'error', message: error.message }; }
 
-    const users = await read.readDocuments({ $and: [{ username: username }, { password: password }] }, User);
-
+    const users = await read.readDocuments({ $and: [{ username: username }, { password: password }] }, User, { username: 1, email: 1, _id: 0 });
     if (users === undefined) {
         return { status: 'error', message: 'An error occured, Code : E100' };
     }
-
-    console.log(users);
-
     switch (users.length) {
         case 0:
             return { status: 'error', message: 'An error occured, Code : E101' };
         case 1:
-            const {email} = users[0];
-
+            const { email } = users[0];
             const jwt = {
                 token: generateToken({ username, email }),
                 tokenType: 'Bearer',
@@ -31,13 +31,15 @@ const login = async (username, password) => {
     }
 }
 const register = async (username, email, password) => {
-    const users = await read.readDocuments({ $or: [{ username: username }, { email: email }] }, User, { username: 1, email: 1, _id: 0, __v: 0});
-    console.log(users);
-
-    if (users === undefined) {
-        return { status: 'error', message: 'An error occured, Code : E103' };
+    try {
+        username = sanitize.username(username);
+        email = sanitize.email(email);
+        password = sanitize.password(password);
     }
+    catch (error) { return { status: 'error', message: error.message }; }
 
+    const users = await read.readDocuments({ $or: [{ username: username }, { email: email }] }, User, { username: 1, email: 1, _id: 0 });
+    if (users === undefined) return { status: 'error', message: 'An error occured, Code : E103' };
     switch (users.length) {
         case 0:
             const jwt = {

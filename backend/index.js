@@ -12,6 +12,8 @@ app.post('/cards/add', cards.cards_add);
 
 app.post('/decks/add', decks.deck_add);
 
-app.listen(process.env.SERVER_PORT, () => { 
+app.get('/decks/:name', decks.decks_preview_get);
+
+app.listen(process.env.SERVER_PORT, () => {
     console.log(`Server is running on port ${process.env.SERVER_PORT}`);
 });

@@ -10,10 +10,20 @@ const { Model } = require("mongoose");
  */
 const readDocuments = async (query, model, projection) => {
     try {
-        return await model.find(query);
-    } catch (err) {
+        return await model.find(query, projection);
+    }
+    catch (err) {
         console.error(err);
     }
 };
 
-module.exports = { readDocuments };
+const readDocument = async (query, model, projection) => {
+    try {
+        return await model.findOne(query, projection);
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports = { readDocuments, readDocument };

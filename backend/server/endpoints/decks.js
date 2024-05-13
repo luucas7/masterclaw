@@ -1,8 +1,7 @@
 const { Deck, Card } = require('../mongo/models');
 const { create, drop, read, update } = require('../crud');
-const sanitize = require('../controller/sanitize');
-const formatter = require('../controller/formatter');
-const client = require('../mongo/client');
+const sanitize = require('../misc/sanitize');
+const { verifyToken } = require('../misc/jwt');
 
 const replacePasscodesWithIds = async (main_deck) => {
     // Créer un ensemble unique de passcodes
@@ -21,24 +20,30 @@ const replacePasscodesWithIds = async (main_deck) => {
     return main_deck.map(passcode => (passcodeToId[passcode]));
 }
 
-const new_deck = async (name, description, main_deck, uuid) => {
-
+const createDeck = async (username, deckname, description, main_deck) => {
     try {
-        name = sanitize.deckName(name);
+        uuid = sanitize.username(username);
+        deckname = sanitize.deckName(deckname);
         description = sanitize.deckDescription(description);
-        uuid = sanitize.uuid(uuid);
-        read.
+
+        // Retrive the owner's ID
+        const owner = User.findOne({ username: username });
+        if (!owner) {
+            return { status: 'error', message: 'User not found' };
+        }
+        const ownerId = owner._id;
+
         // Making sure that each card appears at most 3 times, and that the passcodes are valid
         main_deck = sanitize.deck(main_deck);
         // Replacing passcode with MongoDB IDs
         main_deck = await replacePasscodesWithIds(main_deck);
-        
+
         // Creating the deck and saving it to the database
         (new Deck({
-            name: name,
+            name: deckname,
             description: description,
-            main_deck: main_deck,
-            owner: uuid
+            main_deck: main_deck, 
+            owner: ownerId,
         })).save();
 
         return { status: 'success', message: 'Deck created successfully' };
@@ -49,15 +54,41 @@ const new_deck = async (name, description, main_deck, uuid) => {
 }
 
 const deck_add = async (req, res) => {
-    const { name, description, main_deck, uuid } = req.body;
-    console.log('/decks/add', name, uuid, main_deck.length());
-    res.send(await new_deck(username, password));
+    const { jwt, username, deckname, description, main_deck } = req.body;
+    
+    console.log('/decks/add', username, deckname, main_deck.length());
+    if (!verifyToken(jwt)){
+        return res.send({ status: 'error', message: 'Invalid token'});
+    }
+    res.send(await createDeck(username, deckname, description, main_deck));
 }
 
+const getDecksPreview = async (name) => {
+    try {
 
+        // Retrive the owner's ID
+        const owner = User.findOne({
+            username: name
+        });
+        if (!owner) {
+            return { status: 'error', message: 'User not found' };
+        }
+        const ownerId = owner._id;
 
+        return await read.readDocuments({ owner: ownerId}, Deck, { name: 1, description: 1, image: 1 });
+    } catch (error) {
+        return { status: 'error', message: error.message };
+    }
+}
+
+const decks_preview_get = async (req, res) => {
+    const { name } = req.params;
+    console.log('/decks/:name', name);
+    res.send(await getDecksPreview(name));
+}
 
 module.exports = {
+    createDeck,
     deck_add,
-    new_deck
+    decks_preview_get,
 };

@@ -30,6 +30,20 @@ sanitize.username = (input) => {
     return validator.escape(input);
 }
 
+sanitize.password = (input, isSha256 = true) => {
+    
+    if (typeof input !== 'string') throw new Error('Invalid input');
+
+    if (isSha256) {
+        if (!validator.isAlphanumeric(input)) throw new Error('Password must only contain letters and numbers');
+        if (!validator.isLength(input, { min: 64, max: 64 })) throw new Error('Password must be at least 8 characters long and at most 256 characters long');
+    } else {    
+        if (input.length < 3) throw new Error('Password is too short');
+        if (input.length > 30) throw new Error('Password is too long');
+    }
+    return validator.escape(input);
+}
+
 sanitize.uuid = (input) => {
     if (typeof input !== 'string') throw new Error('Invalid input');
     if (!validator.isUUID(input)) throw new Error('Invalid UUID');

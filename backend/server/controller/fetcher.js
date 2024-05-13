@@ -17,7 +17,6 @@ fetcher.downloadImage = async (url, filepath) => {
         if (!fs.existsSync(dir)){
             fs.mkdirSync(dir, { recursive: true });
         }
-
         client.get(url, (res) => {
             if (res.statusCode === 200) {
                 res.pipe(fs.createWriteStream(filepath))
@@ -37,15 +36,12 @@ fetcher.downloadImage = async (url, filepath) => {
  * @returns {Promise<Object>} - The result of the operation
  */
 fetcher.downloadCards = async (cards, folder) => {
-
     const result = cards.map(card => {
         const filepath = path.join(folder, `${card.passcode}.jpg`);
-        
         fetcher.downloadImage(card.image_url, filepath)
             .then(() => console.log(`Downloaded '${card.name}'`) )
             .catch((err) => console.error(`Failed to download '${card.name}': ${err}`) );
     });
-
     return { status: 'success', message: 'Downloaded images', data: result};
 }
 

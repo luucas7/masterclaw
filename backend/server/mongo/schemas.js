@@ -1,7 +1,7 @@
 const validator = require('validator');
 const mongoose = require('./client');
-const {generateUUID} = require('../misc/jwt');
-const { uuid } = require('../controller/sanitize');
+const { generateUUID } = require('../misc/jwt');
+const { uuid } = require('../misc/sanitize');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -92,16 +92,11 @@ const deckSchema = mongoose.Schema({
             }
         }
     },
-    uuid: {
+    // user+name
+    id : {
         type: String,
         required: true,
         unique: true,
-        default: generateUUID(),
-        validate(value) {
-            if (!validator.isUUID(value)) {
-                throw new Error('UUID is invalid');
-            }
-        }
     },
     creation_date: {
         type: Date,
@@ -137,11 +132,39 @@ const cardSchema = mongoose.Schema({
     },
     });
 
+const deckPreviewSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isAlphanumeric(value)) {
+                throw new Error('Deck name must only contain letters and numbers');
+            }
+            if (!validator.isLength(value, { min: 3, max: 20 })) {
+                throw new Error('Deck name must be at least 3 characters long and at most 20 characters long');
+            }
+        }
+    },
+    description: {
+        type: String,
+        required: true,
+        validate(value) {
+            if (!validator.isLength(value, { max: 100 })) {
+                throw new Error('Deck description must be at most 100 characters long');
+            }
+        }
+    },
+    image: {
+        type: String,
+        required: false
+    }
+});
 
 module.exports = {
     schemas: {
         userSchema,
         deckSchema,
         cardSchema,
+        deckPreviewSchema
     }
 };
