@@ -5,7 +5,8 @@ import Login from '../pages/auth/Login'
 import Logout from '../pages/auth/Logout'
 import Register from '../pages/auth/Register'
 import Cards from '../pages/cards/Cards';
-import AddCard from '../pages/cards/AddCard';
+import NewCard from '../pages/cards/NewCard';
+import NewDeck from '../pages/cards/NewDeck';
 import Header from '../components/Header'
 import GlobalSnackbar from '../components/GlobalSnackbar'
 import Decks from '../pages/cards/Decks'
@@ -21,7 +22,8 @@ const AppRouter = () => {
         <Route path='/cards' element={<Cards />} />
         <Route path='/decks' element={<Decks />} />
         <Route path='/decks/:name' element={<Decks />} />
-        <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><AddCard /></RequireAuth>} />
+        <Route path='/decks/new' element={<RequireAuth fallbackPath={'/login'} ><NewDeck /></RequireAuth>} />
+        <Route path='/cards/add' element={<RequireAuth fallbackPath={'/login'} ><NewCard /></RequireAuth>} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/logout' element={<Logout />} />
