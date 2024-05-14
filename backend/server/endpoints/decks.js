@@ -2,6 +2,7 @@ const { Deck, Card } = require('../mongo/models');
 const { create, drop, read, update } = require('../crud');
 const sanitize = require('../misc/sanitize');
 const { verifyToken } = require('../misc/jwt');
+const { User } = require('../mongo/models');
 
 const replacePasscodesWithIds = async (main_deck) => {
     // Créer un ensemble unique de passcodes
@@ -27,7 +28,7 @@ const createDeck = async (username, deckname, description, main_deck) => {
         description = sanitize.deckDescription(description);
 
         // Retrive the owner's ID
-        const owner = User.findOne({ username: username });
+        const owner = read.readDocument({ username: username }, User, { _id: 1 });
         if (!owner) {
             return { status: 'error', message: 'User not found' };
         }
@@ -67,9 +68,7 @@ const getDecksPreview = async (name) => {
     try {
 
         // Retrive the owner's ID
-        const owner = User.findOne({
-            username: name
-        });
+        const owner = read.readDocument({ username: name }, User, { _id: 1 });
         if (!owner) {
             return { status: 'error', message: 'User not found' };
         }
