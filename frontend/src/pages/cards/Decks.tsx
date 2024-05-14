@@ -8,10 +8,10 @@ const Decks = () => {
     <>
       <div className="page-body">
         <Grid container>
-          <Grid item md={6}>
+          <Grid item md={6} className="flexbox align-end">
             <Grid container className="flexbox justify-center">
               <Grid item md={9}>
-                <Box className="cards-container ">
+                <Box className="cards-container">
                   <DeckListing />
                 </Box>
               </Grid>

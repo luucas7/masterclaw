@@ -16,7 +16,6 @@ const Header = () => {
                         <Link to='/adventure' >Adventure</Link>
                         <Link to='/cards' >Cards</Link>
                         <Link to='/decks' >Decks</Link>
-                        <Link to='/test' >Test</Link>
                     </Grid >
                     <Grid item md={1} sm={1} xs={3} className='flexbox flex-row justify-end'>
                         {!isAuthenticated ? <Link to='/login' >Login</Link>

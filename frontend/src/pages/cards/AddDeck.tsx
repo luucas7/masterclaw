@@ -34,7 +34,7 @@ const AddDeck = () => {
   return (
     <>
         <Grid container className="flexbox justify-center">
-          <Grid item lg={4} md={5} sm={6} xs={7}>
+          <Grid item lg={7}>
             <Box className="luucky-form-container">
               <p className="luucky-title">Create a deck</p>
               <Box
