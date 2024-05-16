@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import DeckInfosForm from "../../components/DeckInfosForm";
 import DeckCardsContainer from "../../components/DeckCardsContainer";
 import { Card } from "../../ts/cards";
+import SearchBar from "../../components/SearchBar";
 
 const NewDeck = () => {
 
@@ -38,11 +39,10 @@ const NewDeck = () => {
       <div className="page-body">
         <Grid container >
           <Grid item md={7} sm={7} xs={12} className="flexbox justify-center">
-            <DeckCardsContainer cards={mainDeck}/>
+            <DeckCardsContainer cards={mainDeck} />
           </Grid>
           <Grid item md={5} sm={5} xs={12} className="flexbox justify-center-r align-center">
-
-
+            <SearchBar />
           </Grid>
           <Grid item md={12} sm={12} xs={12} className="flexbox justify-center-r align-center" >
             <DeckInfosForm />
