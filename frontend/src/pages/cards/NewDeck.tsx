@@ -7,6 +7,8 @@ import { Named } from "../../ts/user";
 import { useSnackbar } from "../../hooks/useSnackbar";
 import { Grid } from "@mui/material";
 import DeckInfosForm from "../../components/DeckInfosForm";
+import DeckCardsContainer from "../../components/DeckCardsContainer";
+import { Card } from "../../ts/cards";
 
 const NewDeck = () => {
 
@@ -19,6 +21,7 @@ const NewDeck = () => {
 
   const [description, setDescription] = useState<string>("");
   const [deckname, setDeckname] = useState<string>("");
+  const [mainDeck, setMainDeck] = useState<Card[]>([]);
 
   const createDeck = useCallback(() => {
     axios.post(`${SERVER_HOST}${ENDPOINTS.DECKS}/add`, {
@@ -34,7 +37,14 @@ const NewDeck = () => {
     <>
       <div className="page-body">
         <Grid container >
-          <Grid item md={4} sm={5} xs={12} className="flexbox justify-start " >
+          <Grid item md={7} sm={7} xs={12} className="flexbox justify-center">
+            <DeckCardsContainer cards={mainDeck}/>
+          </Grid>
+          <Grid item md={5} sm={5} xs={12} className="flexbox justify-center-r align-center">
+
+
+          </Grid>
+          <Grid item md={12} sm={12} xs={12} className="flexbox justify-center-r align-center" >
             <DeckInfosForm />
           </Grid>
         </Grid>

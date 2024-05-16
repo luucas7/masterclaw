@@ -1,14 +1,8 @@
 import { useSnackbar } from "../hooks/useSnackbar"
 
-
-
 const Test = () => {
 
-
-
-
     const { openSnackbar} = useSnackbar();
-
 
     return (
         <>
