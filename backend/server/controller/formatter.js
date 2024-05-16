@@ -13,7 +13,9 @@ formatter.toNecessary = async (data) => {
     return data.map(item => ({
         passcode: item.id,
         name: item.name,
-        archetype: item.archetype,
+        type: item.type,
+        desc: item.desc,
+        race: item.race,
         image_url: item.card_images[0]?.image_url_small
     }));
 }
@@ -29,9 +31,8 @@ formatter.toNecessary = async (data) => {
  */
 formatter.addImageUrl = async (data, url, imageFolder) => {
     return data.map(item => ({
-        passcode: item.passcode,
-        name: item.name,
-        image_url: `${url}${imageFolder}${item.passcode}.jpg`
+        image_url: `${url}${imageFolder}${item.passcode}.jpg`,
+        ...item
     }));
 }
 

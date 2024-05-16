@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
         validate(value) {
-            
+
             if (!validator.isAlphanumeric(value)) {
                 throw new Error('Username must only contain letters and numbers');
             }
@@ -93,7 +93,7 @@ const deckSchema = mongoose.Schema({
         }
     },
     // user+name
-    id : {
+    id: {
         type: String,
         required: true,
         unique: true,
@@ -125,10 +125,19 @@ const cardSchema = mongoose.Schema({
             if (!validator.isNumeric(value)) {
                 throw new Error('Passcode must only contain numbers');
             }
-            if (!validator.isLength(value, { min: 8, max: 8 })) {
-                throw new Error('Passcode must be 8 characters long');
-            }
         }
+    },
+    type: {
+        type: String,
+        required: true,
+    },
+    desc: {
+        type: String,
+        required: true,
+    },
+    race: {
+        type: String,
+        required: true,
     },
     });
 
@@ -137,7 +146,7 @@ const deckPreviewSchema = mongoose.Schema({
         type: String,
         required: true,
         validate(value) {
-            if (!validator.isAlphanumeric(value)) {
+            if (!validator.isAlphanumeric(value.replace(/\s+/g, ''))) {
                 throw new Error('Deck name must only contain letters and numbers');
             }
             if (!validator.isLength(value, { min: 3, max: 20 })) {

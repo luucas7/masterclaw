@@ -18,4 +18,8 @@ const dropDocuments = async (documents, model) => {
     model.deleteMany(documents);
 }
 
-module.exports = { dropDocument, dropDocuments};
+const dropAllDocuments = async (model) => {
+    model.deleteMany();
+}
+
+module.exports = { dropDocument, dropDocuments, dropAllDocuments};
