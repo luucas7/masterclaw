@@ -2,7 +2,7 @@
 
 ## Technologies
 
-[![languages](https://skillicons.dev/icons?i=mysql,vite,sass,ts,react,mui,nodejs,mongo,js,html,rust,jest,npm)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=mysql,vite,sass,ts,react,mui,nodejs,mongo,js,html,jest,npm)](https://skillicons.dev)
 
 ## Development
 
@@ -19,6 +19,6 @@
 2. Go into the `frontend` folder : `cd masterclaw/frontend`
 3. Install all the dependecies : `npm install`
 4. Fill out the .env file(s)
-5. Launch the css compilation : `sass -w .\src\style\sass:.\src\style\compiled`
+5. Launch the sass compilation : `sass -w .\src\style\sass:.\src\style\compiled`
 6. Open a new terminal tab, go again in the `frontend` : `cd frontend`
 7. Launch the frontend developement server : `npm run dev`
