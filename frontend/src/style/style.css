@@ -1,0 +1,80 @@
+/* Header */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  color: #d3d3d3;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.05rem;
+  color: #d3d3d3;
+  background-color: #1c1e22;
+}
+
+.page-body {
+  margin-top: calc(3.6rem + 2px);
+  min-height: calc(100dvh - (3.6rem + 2px));
+}
+
+.flexbox {
+  display: flex;
+  align-content: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-center-r > div {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.blue-debug {
+  background-color: #2d477c;
+}
+
+.red-debug {
+  background-color: #3d477c;
+}
+
+.secondary-color-container {
+  background-color: #121211 !important;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #525252;
+  transition: 0.3s;
+  object-fit: contain;
+}
+
+/*# sourceMappingURL=style.css.map */

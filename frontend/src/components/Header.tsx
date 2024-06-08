@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import '../style/compiled/header.css';
 import { Grid } from '@mui/material';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 

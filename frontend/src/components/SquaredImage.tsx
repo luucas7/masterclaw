@@ -1,4 +1,3 @@
-import '../style/compiled/cards.css';
 const SquaredImage = ({ src, alt } :{
     src: string,
     alt: string

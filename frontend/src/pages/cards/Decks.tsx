@@ -1,5 +1,4 @@
 import { Box, Grid } from "@mui/material";
-import "../../style/compiled/cards.css";
 import DeckListing from "./DeckListing";
 import { Link } from "react-router-dom";
 

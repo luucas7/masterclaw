@@ -1,5 +1,3 @@
-/* eslint-disable no-useless-catch */
-import "../../style/compiled/form.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, Grid, TextField } from "@mui/material";
 import { useReducer, useState } from "react";

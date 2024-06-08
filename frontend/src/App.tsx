@@ -2,6 +2,7 @@ import createStore from "react-auth-kit/createStore";
 import AppRouter from "./routes/AppRouter";
 import AuthProvider from "react-auth-kit";
 import {SnackbarProvider} from "./context/SnackbarProvider";
+import 'style/style.css'
 
 const App = () => {
 
