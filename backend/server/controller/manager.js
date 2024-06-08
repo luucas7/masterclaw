@@ -36,7 +36,7 @@ manager.getQueries = async (input) => {
  * @description - This function is the main controller for the manager module. It sanitizes the input, checks if the data is stored, and fetches the data from the API if it isn't.
  * 
  */
-manager.controller = async (input) => {
+manager.fetch = async (input) => {
   let initialInput;
   let isCached;
   try {

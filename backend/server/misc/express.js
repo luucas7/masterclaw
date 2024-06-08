@@ -17,4 +17,12 @@ app.use(express.urlencoded({ extended: true }));
 const dir = path.join(__dirname, '../../public');
 app.use(express.static(dir));
 
+var RateLimit = require('express-rate-limit');
+var limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50,
+});
+
+app.use(limiter);
+
 module.exports = app;
