@@ -22,13 +22,16 @@ The [Mongoose ODM](https://mongoosejs.com/) helps a lot for type casting, valida
 ### Database
 
 [![languages](https://skillicons.dev/icons?i=mongo)](https://skillicons.dev)  
-About the application data, see here what is stored and how : [Mongoose models file](./backend/server/mongo/schemas.js)  
-Since the server stores information from the API locally, it also needs to store the user queries to get the stored information.  
+About the application data, see here what is stored and how : [Mongoose models file](./backend/server/mongo/schemas.js)
 
-I can check if any of the [substrings](https://en.wikipedia.org/wiki/Substring) of the query is stored, if so, all the cards that would have been fetched is already stored in the database, for example :  
-```As an user, i search `darke`,  
+Since the server stores information from the API locally, it also needs to store the user queries to get the stored information.  
+The server checks if any of the [substrings](https://en.wikipedia.org/wiki/Substring) of the query is stored,  
+if so, all the cards that would have been fetched is already stored in the database, for example :
+
+```plaintext
+As an user, i search `darke`,  
 Any of the occurences are valid sub-queries : `darke`, `dark`, `arke`, `dar`, `rke`  
-since I deliberately chose to set the minimum query length to be 3.  
+since I deliberately chose to set the minimum query length to be 3.
 ```
 
 ### Test
