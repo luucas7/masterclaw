@@ -8,18 +8,18 @@ const { Model } = require("mongoose");
  **/
 const dropDocument = async (document, model) => {
     try {
-        model.deleteOne(document);
+        return model.deleteOne(document);
     } catch (err) {
         console.error(err);
     }
 };
 
 const dropDocuments = async (documents, model) => {
-    model.deleteMany(documents);
+    return model.deleteMany(documents);
 }
 
 const dropAllDocuments = async (model) => {
-    model.deleteMany();
+    return model.deleteMany({});
 }
 
 module.exports = { dropDocument, dropDocuments, dropAllDocuments};

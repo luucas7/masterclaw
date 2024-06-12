@@ -1,5 +1,4 @@
-const { Card } = require('../mongo/models')
-const mysqlClient = require('../mysql/client')
+const { Card, Query } = require('../mongo/models')
 const { drop } = require('../crud')
 
 const cacheManager = {}
@@ -7,14 +6,10 @@ const cacheManager = {}
 
 
 cacheManager.clearCache = async () => {
-  try {
-    drop.dropAllDocuments(Card);
-    mysqlClient.query('DELETE FROM query WHERE 1=1');
-
-  } catch (error) {
-    console.error(error)
-  }
-  return { status: 'success', message: 'Cache cleared successfully' };
+  const deletedCards = await drop.dropAllDocuments(Card);
+  const deletedQueries = await drop.dropAllDocuments(Query);
+  console.log(deletedCards);
+  console.log(deletedQueries);
 }
 
 module.exports = cacheManager;
