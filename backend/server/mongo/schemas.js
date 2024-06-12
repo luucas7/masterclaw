@@ -1,7 +1,6 @@
 const validator = require('validator');
 const mongoose = require('./client');
 const { generateUUID } = require('../misc/jwt');
-const { uuid } = require('../misc/sanitize');
 
 const userSchema = mongoose.Schema({
     username: {
@@ -169,11 +168,25 @@ const deckPreviewSchema = mongoose.Schema({
     }
 });
 
+const querySchema = mongoose.Schema({
+    query: {
+        type: String,
+        required: true,
+        unique: true,
+        validate(value) {
+            if (!validator.isLength(value, { min: 3, max: 100})){
+                throw new Error('Query must be at least 3 characters long and at most 100 characters long');
+            }
+        }
+    }
+});
+
 module.exports = {
     schemas: {
         userSchema,
         deckSchema,
         cardSchema,
-        deckPreviewSchema
+        deckPreviewSchema,
+        querySchema
     }
 };

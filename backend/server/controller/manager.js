@@ -4,10 +4,9 @@ require('dotenv').config('../../.env');
 const formatter = require('./formatter');
 const fetcher = require('./fetcher');
 const sanitize = require('../misc/sanitize');
-const { getQuerySubstring, storeQuery } = require('../mysql/queries');
 
 const { read, create } = require('../crud');
-const { Card } = require('../mongo/models');
+const { Card, Query } = require('../mongo/models');
 
 const manager = {};
 
@@ -17,7 +16,7 @@ manager.fetchFromApi = async (input, url) => {
 
 manager.storeCards = (data, query) => {
   create.createDocuments(data, Card);
-  storeQuery(query);
+  create.createDocument({ query: query }, Query);
 }
 
 manager.getCachedData = async (input) => {
@@ -28,6 +27,16 @@ manager.getQueries = async (input) => {
   return await read.readDocuments({ query: input }, Query, { _id: 0, __v: 0 });
 }
 
+manager.doesSubqueryExists = async (input) => {
+
+  // It's that or mysql
+  const allSubQueries = await read.readDocuments({}, Query, { _id: 0, __v: 0 });
+
+  console.log(allSubQueries);
+  return allSubQueries.some(subQuery => input.includes(subQuery.query));
+}
+
+
 /**
  * 
  * @param {String} input - The card name to search for
@@ -36,7 +45,7 @@ manager.getQueries = async (input) => {
  * @description - This function is the main controller for the manager module. It sanitizes the input, checks if the data is stored, and fetches the data from the API if it isn't.
  * 
  */
-manager.fetch = async (input) => {
+manager.handleCardQuery = async (input) => {
   let initialInput;
   let isCached;
   try {
@@ -46,19 +55,21 @@ manager.fetch = async (input) => {
     console.log(`Input : ${input}`);
     // Checking if any queries which are substrings of the input are already stored
     // If `ab` is stored, then any query *ab* will concern data containing `ab`
-    isCached = (await getQuerySubstring(input)).found;
+    isCached = await manager.doesSubqueryExists(input);
+
+    console.log('Is cached : ', isCached);
 
     if (isCached) {
       // We just have to fetch the data from the database since it's already stored
       let data = await manager.getCachedData(input);
-      console.log('Stored data : ', data);
+      console.log('Stored data : ', data.length);
       data = await formatter.addImageUrl(data, process.env.SERVER_HOST, '/cards/');
       return { status: 'success', message: 'Sending stored data', data: data };
     } else {
       // Fetching data from the API
       const result = await manager.fetchFromApi(input, process.env.API_URL);
       let data = await formatter.toNecessary(result.data);
-      console.log('Data : ', data);
+      console.log('Data : ', data.length);
 
       // Getting all the cards that we already store, to stop already stored data from the cards to fetch
       let storedPasscodes = await formatter.getUniqueValues((await manager.getCachedData(input)), 'passcode');
@@ -66,13 +77,13 @@ manager.fetch = async (input) => {
 
       // Filtering the data to remove already stored cards
       data = data.filter(card => !storedPasscodes.has(String(card.passcode)));
-      console.log('Data after filtering : ', data);
+      console.log('Data after filtering : ', data.length);
 
       // Downloading the images and putting them in the public folder
       fetcher.downloadCards(data, path.join(__dirname, '../../public/cards'));
 
       // Storing the data in the database
-      manager.storeCards(data, initialInput);
+      manager.storeCards(data, input);
 
       return { status: 'success', message: 'Data fetched from the API', data: data };
     }

@@ -36,13 +36,20 @@ fetcher.downloadImage = async (url, filepath) => {
  * @returns {Promise<Object>} - The result of the operation
  */
 fetcher.downloadCards = async (cards, folder) => {
+    console.log(`Downloading ${cards.length} images...`);
+    try {
     const result = cards.map(card => {
         const filepath = path.join(folder, `${card.passcode}.jpg`);
+        console.log(`Downloading '${card.name}' to ${filepath}`);
         fetcher.downloadImage(card.image_url, filepath)
             .then(() => console.log(`Downloaded '${card.name}'`) )
             .catch((err) => console.error(`Failed to download '${card.name}': ${err}`) );
     });
     return { status: 'success', message: 'Downloaded images', data: result};
+} catch (err) {
+    return { status: 'error', message: err.message };
+
+}
 }
 
 /**
