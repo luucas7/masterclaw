@@ -2,7 +2,7 @@
 
 readme in WIP...
 
-[![languages](https://skillicons.dev/icons?i=express,mysql,vite,sass,ts,react,mui,nodejs,mongo,js,jest,npm)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=express,mysql,vite,sass,ts,docker,react,mui,nodejs,mongo,nginx,js,jest,npm)](https://skillicons.dev)
 
 ## Backend
 
@@ -36,3 +36,10 @@ since I deliberately chose to set the minimum query length to be 3.
 ### Testing
 
 [![languages](https://skillicons.dev/icons?i=jest,js)](https://skillicons.dev)
+
+## Frontend
+[![languages](https://skillicons.dev/icons?i=react,mui,sass,vite)](https://skillicons.dev)
+
+## Deployement
+[![languages](https://skillicons.dev/icons?i=docker)](https://skillicons.dev)
+
