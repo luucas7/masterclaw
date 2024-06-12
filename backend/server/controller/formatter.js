@@ -32,7 +32,7 @@ formatter.toNecessary = async (data) => {
 formatter.addImageUrl = async (data, url, imageFolder) => {
     return data.map(item => ({
         image_url: `${url}${imageFolder}${item.passcode}.jpg`,
-        ...item
+        ...item._doc
     }));
 }
 
