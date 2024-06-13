@@ -2,7 +2,7 @@ const fs = require('fs');
 const client = require('https');
 const path = require('path');
 const fetcher = {};
-require('dotenv').config('../../.env');
+require('dotenv').config('.env');
 
 /**
  * @param {string} url - The url of the image to download
@@ -12,11 +12,6 @@ require('dotenv').config('../../.env');
  */
 fetcher.downloadImage = async (url, filepath) => {
     return new Promise((resolve, reject) => {
-        // Create directory if it doesn't exist
-        const dir = path.dirname(filepath);
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir, { recursive: true });
-        }
         client.get(url, (res) => {
             if (res.statusCode === 200) {
                 res.pipe(fs.createWriteStream(filepath))
@@ -35,21 +30,31 @@ fetcher.downloadImage = async (url, filepath) => {
  * @param {path} folder 
  * @returns {Promise<Object>} - The result of the operation
  */
-fetcher.downloadCards = async (cards, folder) => {
-    console.log(`Downloading ${cards.length} images...`);
-    try {
-    const result = cards.map(card => {
-        const filepath = path.join(folder, `${card.passcode}.jpg`);
-        console.log(`Downloading '${card.name}' to ${filepath}`);
-        fetcher.downloadImage(card.image_url, filepath)
-            .then(() => console.log(`Downloaded '${card.name}'`) )
-            .catch((err) => console.error(`Failed to download '${card.name}': ${err}`) );
-    });
-    return { status: 'success', message: 'Downloaded images', data: result};
-} catch (err) {
-    return { status: 'error', message: err.message };
+fetcher.downloadCardImages = async (cards, folder) => {
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder, { recursive: true });
+    }
 
-}
+    let i = 0;
+    for (const card of cards) {
+        const filepath = path.join(folder, `${card.passcode}.jpg`);
+
+        if (fs.existsSync(filepath)) {
+            console.log(`'${card.name}' already exists`);
+            continue;
+        }
+
+        fetcher.downloadImage(card.image_url, filepath)
+            .then(() => console.log(`Downloaded '${card.name}'`))
+            .catch((err) => console.error(`Failed to download '${card.name}': ${err}`));
+
+        if (++i % 20 === 0) {
+            await new Promise(resolve => setTimeout(resolve, 1200));
+            console.log('Waiting for ~1 second to avoid rate limiting...');
+        }
+    }
+    return { status: 'success', message: 'Downloaded images' };
 }
 
 /**
@@ -75,6 +80,6 @@ fetcher.fetch = async (url, query) => {
                 throw new Error('Failed to fetch data');
             });
         });
-}
+  }
 
 module.exports = fetcher;
