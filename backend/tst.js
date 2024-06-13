@@ -11,7 +11,7 @@ const { Card, Query } = require('./server/mongo/models');
 
 const test = async () => {
 
-    const result = await manager.handleCardQuery('Dark Magician');
+    const result = await manager.handleCardQuery('two-mouth');
     console.log("Final result: ", result.data.length);
 
     //const result = await decks.new_deck('lucas', 'description', Array(3).fill('65338781'), 'dc41cf20-c7cc-444e-a4b4-68c68453619a');

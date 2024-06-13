@@ -112,9 +112,6 @@ const cardSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        validate(value) {
-            if (!validator.isAlphanumeric(value.replace(/\s+/g, ''))) throw new Error('Card name must only contain letters and numbers');
-        }
     },
     passcode: {
         type: String,

@@ -20,19 +20,17 @@ formatter.toNecessary = async (data) => {
     }));
 }
 
-/**
- * 
- * @param {Array<Object>} data 
- * @param {string} url 
- * @param {string} imageFolder 
- * @returns {Promise<Array<Object>>} - The result of the operation
- * @description - Adds the field `image_url` to the cards
- * @example
- */
-formatter.addImageUrl = async (data, url, imageFolder) => {
+formatter.addImageUrlFromCache = async (data, url, imageFolder) => {
     return data.map(item => ({
         image_url: `${url}${imageFolder}${item.passcode}.jpg`,
         ...item._doc
+    }));
+}
+
+formatter.addImageUrl = async (data, url, imageFolder) => {
+    return data.map(item => ({
+        image_url: `${url}${imageFolder}${item.passcode}.jpg`,
+        ...item
     }));
 }
 

@@ -8,14 +8,14 @@ const { Model } = require("mongoose");
  **/
 const createDocument = async (document, model) => {
     try {
-        model.create(document);
+        return model.create(document);
     } catch (err) {
         console.error(err);
     }
 };
 
 const createDocuments = async (documents, model) => {
-    model.insertMany(documents);
+    return model.insertMany(documents);
 }
 
 module.exports = { createDocument, createDocuments };
