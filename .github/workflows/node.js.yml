@@ -21,6 +21,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Checkout to Node.js server
+      run: cd backend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
