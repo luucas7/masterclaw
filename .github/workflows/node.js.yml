@@ -19,11 +19,20 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x]
-
     steps:
     - uses: actions/checkout@v4
     - name: Installing dependencies
-      run:  npm i 
+      run:  npm i
+      
+    - name: Creating environment file
+      run: echo "MONGO_URI={{secrets.MONGO_URI}}" > .env
+      run: echo "JWT_SECRET={{secrets.JWT_SECRET}}" >> .env
+      run: echo "CLIENT_HOST={{secrets.CLIENT_HOST}}" >> .env
+      run: echo "SERVER_HOST={{secrets.SERVER_HOST}}" >> .env
+      run: echo "SERVER_PORT={{secrets.SERVER_PORT}}" >> .env
+      run: echo "LOCALE={{secrets.LOCALE}}" >> .env
+      run: echo "API_URL={{secrets.API_URL}}" >> .env
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
