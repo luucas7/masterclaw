@@ -4,14 +4,12 @@ ARG FRONT_END_PORT
 
 WORKDIR /usr/src/app
 
-RUN echo "Argument port is : $FRONT_END_PORT"
-
 COPY package.json /usr/src/app
 
-RUN npm install
+RUN npm install --loglevel verbose
 
 COPY . /usr/src/app
 
 EXPOSE ${FRONT_END_PORT}
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
