@@ -41,5 +41,5 @@ since I deliberately chose to set the minimum query length to be 3.
 [![languages](https://skillicons.dev/icons?i=ts,react,mui,sass,vite)](https://skillicons.dev)
 
 ## Deployement
-[![languages](https://skillicons.dev/icons?i=docker)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=docker,nginx)](https://skillicons.dev)
 
