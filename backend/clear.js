@@ -1,5 +1,5 @@
 //TODO DEV
-const cacheManager = require('./server/admin/cache');
+const cacheManager = require('./src/admin/cache');
 
 const clearCache = async () => { 
     await cacheManager.clearCache();
