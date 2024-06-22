@@ -1,13 +1,13 @@
 //TODO DEV
 
-const app = require('./server/misc/express');
+const app = require('./src/misc/express');
 const path = require('path');
 require('dotenv').config();
 
-const { auth, cards, decks } = require('./server/endpoints');
-const manager = require('./server/controller/manager');
-const { read, create } = require('./server/crud');
-const { Card, Query } = require('./server/mongo/models');
+const { auth, cards, decks } = require('./src/endpoints');
+const manager = require('./src/controller/manager');
+const { read, create } = require('./src/crud');
+const { Card, Query } = require('./src/mongo/models');
 
 const test = async () => {
 

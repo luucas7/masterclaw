@@ -31,7 +31,6 @@ jobs:
         echo "CLIENT_HOST=${{ secrets.CLIENT_HOST }}" >> .env
         echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
         echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
-        echo "LOCALE=${{ secrets.LOCALE }}" >> .env
         echo "API_URL=${{ secrets.API_URL }}" >> .env
 
     - name: Use Node.js ${{ matrix.node-version }}

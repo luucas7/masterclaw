@@ -22,7 +22,7 @@ The [Mongoose ODM](https://mongoosejs.com/) helps a lot for type casting, valida
 ### Database
 
 [![languages](https://skillicons.dev/icons?i=mongo)](https://skillicons.dev)  
-About the application data, see here what is stored and how : [Models file](./backend/server/mongo/schemas.js)  
+About the application data, see here what is stored and how : [Models file](./backend/src/mongo/schemas.js)  
 Models define the structure of documents in the MongoDB database. They specify the fields and data types for each collection, as well as the relationships between different collections. MongoDB uses collections to group similar documents. 
 
 Since the server stores information from the API locally, it also needs to store the user queries to get the stored information.  
@@ -41,5 +41,5 @@ since I deliberately chose to set the minimum query length to be 3.
 [![languages](https://skillicons.dev/icons?i=ts,react,mui,sass,vite)](https://skillicons.dev)
 
 ## Deployement
-[![languages](https://skillicons.dev/icons?i=docker)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=docker,nginx)](https://skillicons.dev)
 
