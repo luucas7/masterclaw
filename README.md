@@ -2,7 +2,7 @@
 
 readme in WIP...
 
-[![languages](https://skillicons.dev/icons?i=express,vite,sass,ts,docker,react,mui,nodejs,mongo,nginx,js,jest,npm)](https://skillicons.dev)
+[![languages](https://skillicons.dev/icons?i=express,vite,sass,ts,docker,react,mui,nodejs,mongo,nginx,js,jest,npm,githubactions)](https://skillicons.dev)
 
 ## Backend
 
